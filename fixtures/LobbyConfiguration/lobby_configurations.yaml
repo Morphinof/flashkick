@@ -1,0 +1,3 @@
+Flashkick\Entity\LobbyConfiguration:
+  lobby_configuration_default:
+    game: '@game_sf5'

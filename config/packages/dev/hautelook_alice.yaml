@@ -5,4 +5,5 @@ hautelook_alice:
         - Player
         - User
         - Game
+        - LobbyConfiguration
         - Lobby
