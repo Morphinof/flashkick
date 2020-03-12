@@ -2,4 +2,7 @@ hautelook_alice:
     root_dirs:
         - fixtures
     fixtures_path:
+        - Player
         - User
+        - Game
+        - Lobby

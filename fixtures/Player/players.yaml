@@ -1,0 +1,10 @@
+Flashkick\Entity\Player:
+  player_morphinof:
+    pseudo: Morphinof
+    uuid: <uuid()>
+  player_john_doe:
+    pseudo: John Doe
+    uuid: <uuid()>
+  player_bob:
+    pseudo: Bob
+    uuid: <uuid()>

@@ -19,7 +19,7 @@ trait UuidTrait
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
-    private UuidInterface $uuid;
+    private ?UuidInterface $uuid = null;
 
     /**
      * Auto-create uuid

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Flashkick\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Flashkick\Traits\EntityWithUuidTrait;
+use Flashkick\Traits\EntityTrait;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    use EntityWithUuidTrait;
+    use EntityTrait;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -36,6 +36,11 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private bool $enabled;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Player::class, cascade={"persist", "remove"})
+     */
+    private Player $player;
 
     public function __construct()
     {
@@ -61,7 +66,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**
@@ -88,7 +93,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -113,5 +118,15 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getPlayer(): ?Player
+    {
+        return $this->player;
+    }
+
+    public function setPlayer(?Player $player): void
+    {
+        $this->player = $player;
     }
 }

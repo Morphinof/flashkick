@@ -1,6 +1,16 @@
 Flashkick\Entity\User:
-  morphinof:
+  user_morphinof:
     email: morphinof@flashkick.com
     password: admin
-    uuid: <uuid()>
     roles: ['ROLE_ADMIN']
+    player: '@player_morphinof'
+  user_john_doe:
+    email: john.doe@flashkick.com
+    password: doe
+    roles: ['ROLE_USER']
+    player: '@player_john_doe'
+  user_bob:
+    email: bob@flashkick.com
+    password: bob
+    roles: ['ROLE_USER']
+    player: '@player_bob'
