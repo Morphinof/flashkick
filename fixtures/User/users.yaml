@@ -1,0 +1,6 @@
+Flashkick\Entity\User:
+  morphinof:
+    email: morphinof@flashkick.com
+    password: admin
+    uuid: <uuid()>
+    roles: ['ROLE_ADMIN']
