@@ -18,6 +18,12 @@ class LobbyConfiguration
     use EntityTrait;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Player::class)
+     * @ORM\JoinColumn(name="admin_id", referencedColumnName="id")
+     */
+    private Player $admin;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Game::class)
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
      */
@@ -28,6 +34,29 @@ class LobbyConfiguration
      */
     private string $mode = self::MODE_KOTH;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private int $maxPlayers;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private int $bestOf;
+
+    public function getAdmin(): Player
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(Player $admin): void
+    {
+        $this->admin = $admin;
+    }
+
+    /**
+     * @return Game
+     */
     public function getGame(): Game
     {
         return $this->game;
@@ -38,11 +67,6 @@ class LobbyConfiguration
         $this->game = $game;
     }
 
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private int $bestOf = 3;
-
     public function getMode(): string
     {
         return $this->mode;
@@ -51,6 +75,16 @@ class LobbyConfiguration
     public function setMode(string $mode): void
     {
         $this->mode = $mode;
+    }
+
+    public function getMaxPlayers(): int
+    {
+        return $this->maxPlayers;
+    }
+
+    public function setMaxPlayers(int $maxPlayers): void
+    {
+        $this->maxPlayers = $maxPlayers;
     }
 
     public function getBestOf(): int

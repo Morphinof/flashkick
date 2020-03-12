@@ -1,5 +1,6 @@
 Flashkick\Entity\Lobby:
   lobby_test:
+    creator: '@player_morphinof'
     uuid: <uuid()>
     configuration: '@lobby_configuration_default'
     players:

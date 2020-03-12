@@ -2,9 +2,10 @@
 
 namespace Flashkick\Repository;
 
-use Flashkick\Entity\Lobby;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Flashkick\Entity\Game;
+use Flashkick\Entity\Lobby;
 
 /**
  * @method Lobby|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,18 @@ class LobbyRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Lobby::class);
+    }
+
+    public function findByGame(Game $game): array
+    {
+        return $this->createQueryBuilder('l')
+            ->leftJoin('l.configuration', 'l_c')
+            ->andWhere('l_c.game = :game')
+            ->setParameter('game', $game)
+            ->orderBy('l.createdAt', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

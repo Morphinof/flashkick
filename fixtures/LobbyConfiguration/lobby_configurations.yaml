@@ -1,3 +1,6 @@
 Flashkick\Entity\LobbyConfiguration:
   lobby_configuration_default:
+    admin: '@player_bob'
     game: '@game_sf5'
+    maxPlayers: 5
+    bestOf: 3

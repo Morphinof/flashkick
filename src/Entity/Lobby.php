@@ -16,6 +16,12 @@ class Lobby
     use EntityWithUuidTrait;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Player::class)
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
+     */
+    private Player $creator;
+
+    /**
      * @ORM\ManyToOne(targetEntity=LobbyConfiguration::class)
      * @ORM\JoinColumn(name="lobby_configuration_id", referencedColumnName="id")
      */
@@ -34,6 +40,16 @@ class Lobby
     public function __construct()
     {
         $this->players = new ArrayCollection();
+    }
+
+    public function getCreator(): Player
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(Player $creator): void
+    {
+        $this->creator = $creator;
     }
 
     public function getConfiguration(): LobbyConfiguration
@@ -66,5 +82,16 @@ class Lobby
         if ($this->players->contains($player)) {
             $this->players->removeElement($player);
         }
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s - %s (%d/%d)',
+            $this->uuid,
+            $this->configuration->getGame(),
+            $this->players->count(),
+            $this->configuration->getMaxPlayers(),
+        );
     }
 }

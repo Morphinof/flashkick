@@ -29,4 +29,9 @@ class Game
     {
         $this->name = $name;
     }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 }
