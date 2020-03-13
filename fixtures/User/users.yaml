@@ -14,3 +14,13 @@ Flashkick\Entity\User:
     password: bob
     roles: ['ROLE_USER']
     player: '@player_bob'
+  user_a:
+    email: a@flashkick.com
+    password: a
+    roles: ['ROLE_USER']
+    player: '@player_a'
+  user_b:
+    email: b@flashkick.com
+    password: b
+    roles: ['ROLE_USER']
+    player: '@player_b'

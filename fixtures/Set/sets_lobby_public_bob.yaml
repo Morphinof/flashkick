@@ -1,0 +1,22 @@
+Flashkick\Entity\Set:
+  lobby_public_bob_set_1:
+    uuid: <uuid()>
+    matches:
+      - '@lobby_public_bob_set_1_match_1'
+      - '@lobby_public_bob_set_1_match_2'
+      - '@lobby_public_bob_set_1_match_3'
+  lobby_public_bob_set_2:
+    uuid: <uuid()>
+    matches:
+      - '@lobby_public_bob_set_2_match_1'
+      - '@lobby_public_bob_set_2_match_2'
+      - '@lobby_public_bob_set_2_match_3'
+  lobby_public_bob_set_3:
+    uuid: <uuid()>
+    matches:
+      - '@lobby_public_bob_set_3_match_1'
+      - '@lobby_public_bob_set_3_match_2'
+  lobby_public_bob_set_4:
+    uuid: <uuid()>
+    matches:
+      - '@lobby_public_bob_set_4_match_1'

@@ -1,18 +1,23 @@
 Flashkick\Entity\Lobby:
-  lobby_test:
+  lobby_public_bob:
     creator: '@player_bob'
     uuid: <uuid()>
-    configuration: '@lobby_configuration_default'
+    configuration: '@lobby_configuration_lobby_public_bob'
     players:
-      - '@player_morphinof'
       - '@player_john_doe'
       - '@player_bob'
     sets:
-        - '@lobby_test_set_1'
-        - '@lobby_test_set_2'
-        - '@lobby_test_set_3'
-  lobby_private:
+      - '@lobby_public_bob_set_1'
+      - '@lobby_public_bob_set_2'
+      - '@lobby_public_bob_set_3'
+      - '@lobby_public_bob_set_4'
+  lobby_private_morphinof:
     creator: '@player_morphinof'
     uuid: <uuid()>
-    configuration: '@lobby_configuration_private'
+    configuration: '@lobby_configuration_lobby_private_morphinof'
     mode: 0
+    players:
+      - '@player_a'
+      - '@player_b'
+    sets:
+      - '@lobby_private_morphinof_set_1'

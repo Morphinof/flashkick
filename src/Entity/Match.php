@@ -34,6 +34,11 @@ class Match
      */
     private ?Player $winner;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $ended = false;
+
     public function getPlayer1(): Player
     {
         return $this->player1;
@@ -62,5 +67,15 @@ class Match
     public function setWinner(?Player $winner): void
     {
         $this->winner = $winner;
+    }
+
+    public function isEnded(): bool
+    {
+        return $this->ended;
+    }
+
+    public function setEnded(bool $ended = true): void
+    {
+        $this->ended = $ended;
     }
 }

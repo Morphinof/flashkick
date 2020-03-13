@@ -29,13 +29,21 @@
     <div style="float: left;">
         <h3>Sets history</h3>
         {% for set in lobby.sets %}
-            <p>Set {{ loop.index }} ({{ set.uuid }})</p>
+            <p>Set {{ loop.index }}</p>
             {% for match in set.matches %}
                 <ul>
                     <li>
                         {{ match.player1 }} VS {{ match.player2 }} |
                         {% if match.winner is not null %}
                             Winner {{ match.winner }}
+                        {% elseif not match.ended %}
+                            Pending...
+                            <div>
+                                {% if app.user.player == match.player1 or app.user.player == match.player2%}
+                                    <a href="#">WON</a>
+                                    <a href="#">LOOSE</a>
+                                {% endif %}
+                            </div>
                         {% else %}
                             Draw game
                         {% endif %}

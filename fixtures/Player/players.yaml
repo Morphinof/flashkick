@@ -8,3 +8,9 @@ Flashkick\Entity\Player:
   player_bob:
     pseudo: Bob
     uuid: <uuid()>
+  player_a:
+    pseudo: A
+    uuid: <uuid()>
+  player_b:
+    pseudo: B
+    uuid: <uuid()>

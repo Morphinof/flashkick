@@ -1,0 +1,5 @@
+Flashkick\Entity\Match:
+  lobby_private_morphinof_set_1_match_1:
+    uuid: <uuid()>
+    player1: '@player_morphinof'
+    player2: '@player_a'

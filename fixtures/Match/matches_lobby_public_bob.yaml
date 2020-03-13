@@ -1,41 +1,53 @@
 Flashkick\Entity\Match:
-    lobby_1_set_1_match_1:
+    lobby_public_bob_set_1_match_1:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
-    lobby_1_set_1_match_2:
+        ended: true
+    lobby_public_bob_set_1_match_2:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_john_doe'
-    lobby_1_set_1_match_3:
+        ended: true
+    lobby_public_bob_set_1_match_3:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
-    lobby_1_set_2_match_1:
+        ended: true
+    lobby_public_bob_set_2_match_1:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_john_doe'
-    lobby_1_set_2_match_2:
+        ended: true
+    lobby_public_bob_set_2_match_2:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
-    lobby_1_set_2_match_3:
+        ended: true
+    lobby_public_bob_set_2_match_3:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
-    lobby_1_set_3_match_1:
+        ended: true
+    lobby_public_bob_set_3_match_1:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
-    lobby_1_set_3_match_2:
+        ended: true
+    lobby_public_bob_set_3_match_2:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
+        ended: true
+    lobby_public_bob_set_4_match_1:
+        uuid: <uuid()>
+        player1: '@player_john_doe'
+        player2: '@player_bob'

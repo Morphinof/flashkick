@@ -1,0 +1,5 @@
+Flashkick\Entity\Set:
+  lobby_private_morphinof_set_1:
+    uuid: <uuid()>
+    matches:
+      - '@lobby_private_morphinof_set_1_match_1'

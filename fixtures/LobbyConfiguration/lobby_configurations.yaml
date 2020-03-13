@@ -1,10 +1,10 @@
 Flashkick\Entity\LobbyConfiguration:
-  lobby_configuration_default:
-    admin: '@player_morphinof'
+  lobby_configuration_lobby_public_bob:
+    admin: '@player_bob'
     game: '@game_sf5'
     maxPlayers: 5
     bestOf: 3
-  lobby_configuration_private:
+  lobby_configuration_lobby_private_morphinof:
     admin: '@player_morphinof'
     game: '@game_sf5'
     maxPlayers: 2
