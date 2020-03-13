@@ -35,9 +35,20 @@ class Match
     private ?Player $winner;
 
     /**
+     * @ORM\OneToOne(targetEntity=MatchResolution::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="resolution_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private MatchResolution $resolution;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private bool $ended = false;
+
+    public function __construct()
+    {
+        $this->resolution = new MatchResolution();
+    }
 
     public function getPlayer1(): Player
     {
@@ -69,6 +80,16 @@ class Match
         $this->winner = $winner;
     }
 
+    public function getResolution(): MatchResolution
+    {
+        return $this->resolution;
+    }
+
+    public function setResolution(MatchResolution $resolution): void
+    {
+        $this->resolution = $resolution;
+    }
+
     public function isEnded(): bool
     {
         return $this->ended;
@@ -77,5 +98,10 @@ class Match
     public function setEnded(bool $ended = true): void
     {
         $this->ended = $ended;
+    }
+
+    public function isPlayer(Player $player): bool
+    {
+        return $this->player1 === $player || $this->player2 === $player;
     }
 }

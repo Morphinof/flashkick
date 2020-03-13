@@ -1,0 +1,31 @@
+Flashkick\Entity\MatchResolution:
+  lobby_public_bob_set_1_match_1_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::LOOSE)>
+    validationP2: <(Flashkick\Entity\MatchResolution::WIN)>
+  lobby_public_bob_set_1_match_2_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::WIN)>
+    validationP2: <(Flashkick\Entity\MatchResolution::LOOSE)>
+  lobby_public_bob_set_1_match_3_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::LOOSE)>
+    validationP2: <(Flashkick\Entity\MatchResolution::WIN)>
+
+  lobby_public_bob_set_2_match_1_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::WIN)>
+    validationP2: <(Flashkick\Entity\MatchResolution::LOOSE)>
+  lobby_public_bob_set_2_match_2_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::WIN)>
+    validationP2: <(Flashkick\Entity\MatchResolution::LOOSE)>
+  lobby_public_bob_set_2_match_3_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::WIN)>
+    validationP2: <(Flashkick\Entity\MatchResolution::LOOSE)>
+
+  lobby_public_bob_set_3_match_1_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::LOOSE)>
+    validationP2: <(Flashkick\Entity\MatchResolution::WIN)>
+  lobby_public_bob_set_3_match_2_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::LOOSE)>
+    validationP2: <(Flashkick\Entity\MatchResolution::WIN)>
+
+  lobby_public_bob_set_4_match_1_resolution:
+    validationP1: <(Flashkick\Entity\MatchResolution::DRAW)>
+    validationP2: <(Flashkick\Entity\MatchResolution::DRAW)>
