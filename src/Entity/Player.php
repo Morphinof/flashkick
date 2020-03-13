@@ -27,4 +27,9 @@ class Player
     {
         $this->pseudo = $pseudo;
     }
+
+    public function __toString(): string
+    {
+        return $this->pseudo;
+    }
 }

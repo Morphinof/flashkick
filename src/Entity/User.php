@@ -38,7 +38,7 @@ class User implements UserInterface
     private bool $enabled;
 
     /**
-     * @ORM\OneToOne(targetEntity=Player::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Player::class, cascade={"persist", "remove"}, fetch="EAGER")
      */
     private Player $player;
 
@@ -120,12 +120,12 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getPlayer(): ?Player
+    public function getPlayer(): Player
     {
         return $this->player;
     }
 
-    public function setPlayer(?Player $player): void
+    public function setPlayer(Player $player): void
     {
         $this->player = $player;
     }

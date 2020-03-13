@@ -1,41 +1,41 @@
 Flashkick\Entity\Match:
     lobby_1_set_1_match_1:
         uuid: <uuid()>
-        player1: '@player_morphinof'
+        player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
     lobby_1_set_1_match_2:
         uuid: <uuid()>
-        player1: '@player_morphinof'
+        player1: '@player_john_doe'
         player2: '@player_bob'
-        winner: '@player_morphinof'
+        winner: '@player_john_doe'
     lobby_1_set_1_match_3:
         uuid: <uuid()>
-        player1: '@player_morphinof'
+        player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
     lobby_1_set_2_match_1:
         uuid: <uuid()>
-        player1: '@player_morphinof'
+        player1: '@player_john_doe'
         player2: '@player_bob'
-        winner: '@player_morphinof'
+        winner: '@player_john_doe'
     lobby_1_set_2_match_2:
         uuid: <uuid()>
-        player1: '@player_morphinof'
+        player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
     lobby_1_set_2_match_3:
         uuid: <uuid()>
-        player1: '@player_morphinof'
+        player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
     lobby_1_set_3_match_1:
         uuid: <uuid()>
-        player1: '@player_morphinof'
+        player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
     lobby_1_set_3_match_2:
         uuid: <uuid()>
-        player1: '@player_morphinof'
+        player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'

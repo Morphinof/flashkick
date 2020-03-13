@@ -13,6 +13,9 @@ use Flashkick\Traits\EntityWithUuidTrait;
  */
 class Lobby
 {
+    public const MODE_PUBLIC = 1;
+    public const MODE_PRIVATE = 0;
+
     use EntityWithUuidTrait;
 
     /**
@@ -46,6 +49,11 @@ class Lobby
      * )
      */
     private Collection $sets;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private int $mode = self::MODE_PUBLIC;
 
     public function __construct()
     {
@@ -111,15 +119,25 @@ class Lobby
         }
     }
 
+    public function getMode(): int
+    {
+        return $this->mode;
+    }
+
+    public function setMode(int $mode): void
+    {
+        $this->mode = $mode;
+    }
+
     public function __toString(): string
     {
         return sprintf(
-            '%s - %s [%d/%d] - %d matches ',
-            $this->uuid,
+            '%s [%d/%d] players - %d match(s) done - created by %s',
             $this->configuration->getGame(),
             $this->players->count(),
             $this->configuration->getMaxPlayers(),
             $this->sets->count(),
+            $this->creator
         );
     }
 }

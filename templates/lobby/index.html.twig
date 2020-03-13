@@ -11,7 +11,10 @@
 <div class="example-wrapper">
     <ul>
         {% for lobby in lobbies %}
-            <li>{{ lobby }}</li>
+            <li>
+                {{ lobby }}
+                <a href="{{ path('flashkick_lobby_join', {'lobby': lobby.id}) }}">Join</a>
+            </li>
         {% endfor %}
     </ul>
 </div>

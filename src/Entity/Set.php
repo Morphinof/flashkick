@@ -19,6 +19,11 @@ class Set
     use EntityWithUuidTrait;
 
     /**
+     * @ORM\Column(type="smallint")
+     */
+    private int $bestOf = 3;
+
+    /**
      * @ORM\ManyToMany(targetEntity=Match::class)
      * @ORM\JoinTable(
      *     name="sets_matches",
@@ -31,6 +36,16 @@ class Set
     public function __construct()
     {
         $this->matches = new ArrayCollection();
+    }
+
+    public function getBestOf(): int
+    {
+        return $this->bestOf;
+    }
+
+    public function setBestOf(int $bestOf): void
+    {
+        $this->bestOf = $bestOf;
     }
 
     public function getMatches(): Collection
