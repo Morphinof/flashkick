@@ -8,4 +8,5 @@ hautelook_alice:
         - LobbyConfiguration
         - Lobby
         - Set
+        - MatchResolution
         - Match

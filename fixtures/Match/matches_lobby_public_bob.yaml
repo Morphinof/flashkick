@@ -4,50 +4,60 @@ Flashkick\Entity\Match:
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
+        resolution: '@lobby_public_bob_set_1_match_1_resolution'
         ended: true
     lobby_public_bob_set_1_match_2:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_john_doe'
+        resolution: '@lobby_public_bob_set_1_match_2_resolution'
         ended: true
     lobby_public_bob_set_1_match_3:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
+        resolution: '@lobby_public_bob_set_1_match_3_resolution'
         ended: true
     lobby_public_bob_set_2_match_1:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_john_doe'
+        resolution: '@lobby_public_bob_set_2_match_1_resolution'
         ended: true
     lobby_public_bob_set_2_match_2:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
+        resolution: '@lobby_public_bob_set_2_match_2_resolution'
         ended: true
     lobby_public_bob_set_2_match_3:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
+        resolution: '@lobby_public_bob_set_2_match_3_resolution'
         ended: true
     lobby_public_bob_set_3_match_1:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
+        resolution: '@lobby_public_bob_set_3_match_1_resolution'
         ended: true
     lobby_public_bob_set_3_match_2:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
         winner: '@player_bob'
+        resolution: '@lobby_public_bob_set_3_match_2_resolution'
         ended: true
     lobby_public_bob_set_4_match_1:
         uuid: <uuid()>
         player1: '@player_john_doe'
         player2: '@player_bob'
+        resolution: '@lobby_public_bob_set_4_match_1_resolution'
+        ended: true

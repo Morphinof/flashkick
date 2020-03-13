@@ -7,5 +7,5 @@ Flashkick\Entity\LobbyConfiguration:
   lobby_configuration_lobby_private_morphinof:
     admin: '@player_morphinof'
     game: '@game_sf5'
-    maxPlayers: 2
+    maxPlayers: 3
     bestOf: 2
