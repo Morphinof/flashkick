@@ -7,3 +7,5 @@ hautelook_alice:
         - Game
         - LobbyConfiguration
         - Lobby
+        - Set
+        - Match

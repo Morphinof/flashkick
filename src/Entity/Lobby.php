@@ -37,9 +37,20 @@ class Lobby
      */
     private Collection $players;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Set::class)
+     * @ORM\JoinTable(
+     *     name="lobbies_sets",
+     *     joinColumns={@ORM\JoinColumn(name="lobby_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="set_id", referencedColumnName="id", unique=true)}
+     * )
+     */
+    private Collection $sets;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
+        $this->sets = new ArrayCollection();
     }
 
     public function getCreator(): Player
@@ -62,9 +73,6 @@ class Lobby
         $this->configuration = $configuration;
     }
 
-    /**
-     * @return Collection|Player[]
-     */
     public function getPlayers(): Collection
     {
         return $this->players;
@@ -84,14 +92,34 @@ class Lobby
         }
     }
 
+    public function getSets(): Collection
+    {
+        return $this->sets;
+    }
+
+    public function addSet(Set $set): void
+    {
+        if (!$this->players->contains($set)) {
+            $this->sets[] = $set;
+        }
+    }
+
+    public function removeSet(Set $set): void
+    {
+        if ($this->sets->contains($set)) {
+            $this->sets->removeElement($set);
+        }
+    }
+
     public function __toString(): string
     {
         return sprintf(
-            '%s - %s (%d/%d)',
+            '%s - %s [%d/%d] - %d matches ',
             $this->uuid,
             $this->configuration->getGame(),
             $this->players->count(),
             $this->configuration->getMaxPlayers(),
+            $this->sets->count(),
         );
     }
 }

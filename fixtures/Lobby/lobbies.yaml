@@ -7,3 +7,7 @@ Flashkick\Entity\Lobby:
       - '@player_morphinof'
       - '@player_john_doe'
       - '@player_bob'
+    sets:
+        - '@lobby_test_set_1'
+        - '@lobby_test_set_2'
+        - '@lobby_test_set_3'
