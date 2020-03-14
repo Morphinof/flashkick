@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flashkick\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Flashkick\Entity\Lobby;
 use Flashkick\Entity\Player;
 use LogicException;
@@ -13,15 +13,15 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class LobbyService
 {
-    private EntityManagerInterface $manager;
+    private ManagerRegistry $registry;
     private TokenStorageInterface $tokenStorage;
 
     public function __construct(
-        EntityManagerInterface $manager,
+        ManagerRegistry $registry,
         TokenStorageInterface $tokenStorage
     )
     {
-        $this->manager = $manager;
+        $this->registry = $registry;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -43,13 +43,13 @@ class LobbyService
         }
 
         $lobby->addPlayer($player);
-        $this->manager->flush();
+        $this->registry->getManager()->flush();
     }
 
     public function leave(Lobby $lobby, Player $player): void
     {
         $lobby->removePlayer($player);
-        $this->manager->flush();
+        $this->registry->getManager()->flush();
     }
 
     public function kick(Lobby $lobby, Player $player): void
@@ -69,6 +69,6 @@ class LobbyService
         }
 
         $lobby->removePlayer($player);
-        $this->manager->flush();
+        $this->registry->getManager()->flush();
     }
 }

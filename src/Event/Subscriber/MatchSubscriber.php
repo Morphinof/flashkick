@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace Flashkick\Event\Subscriber;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Flashkick\Entity\Match;
-use Flashkick\Events\Match\MatchResolvedEvent;
+use Flashkick\Event\Match\MatchResolvedEvent;
 use Flashkick\Repository\SetRepository;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MatchSubscriber implements EventSubscriberInterface
 {
-    private EntityManagerInterface $manager;
     private SetRepository $setRepository;
 
-    public function __construct(EntityManagerInterface $manager, SetRepository $setRepository)
+    public function __construct(SetRepository $setRepository)
     {
-        $this->manager = $manager;
         $this->setRepository = $setRepository;
     }
 
@@ -48,7 +45,6 @@ class MatchSubscriber implements EventSubscriberInterface
                 $next->setPlayer1($match->getPlayer1());
                 $next->setPlayer2($match->getPlayer2());
                 $set->addMatch($next);
-                $this->manager->flush();
             }
 
             if ($set->getMatches()->count() === $set->getBestOf()) {

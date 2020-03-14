@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Flashkick\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Flashkick\Entity\Match;
 use Flashkick\Entity\MatchResolution;
 use Flashkick\Entity\Player;
-use Flashkick\Events\Match\MatchResolvedEvent;
+use Flashkick\Event\Match\MatchResolvedEvent;
 use InvalidArgumentException;
 use LogicException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class MatchService
 {
-    private EntityManagerInterface $manager;
+    private ManagerRegistry $registry;
     private EventDispatcherInterface $dispatcher;
 
-    public function __construct(EntityManagerInterface $manager, EventDispatcherInterface $dispatcher)
+    public function __construct(ManagerRegistry $registry, EventDispatcherInterface $dispatcher)
     {
-        $this->manager = $manager;
+        $this->registry = $registry;
         $this->dispatcher = $dispatcher;
     }
 
@@ -45,7 +45,7 @@ class MatchService
 
         $this->checkConflicts($match);
 
-        $this->manager->flush();
+        $this->registry->getManager()->flush();
 
         if ($match->getResolution()->getValidationP1() !== null && $match->getResolution()->getValidationP2() !== null) {
             $this->end($match);
@@ -62,7 +62,7 @@ class MatchService
             $match->setWinner($match->getPlayer2());
         }
 
-        $this->manager->flush();
+        $this->registry->getManager()->flush();
     }
 
     public function reset(Match $match): void
@@ -71,7 +71,7 @@ class MatchService
         $resolution->setValidationP1(null);
         $resolution->setValidationP2(null);
 
-        $this->manager->flush();
+        $this->registry->getManager()->flush();
     }
 
     private function checkConflicts(Match $match): void

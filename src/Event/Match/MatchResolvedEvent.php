@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flashkick\Events\Match;
+namespace Flashkick\Event\Match;
 
 use Flashkick\Entity\Match;
 use Symfony\Contracts\EventDispatcher\Event;
