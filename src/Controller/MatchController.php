@@ -4,14 +4,21 @@ namespace Flashkick\Controller;
 
 use Flashkick\Entity\Match;
 use Flashkick\Entity\Player;
-use Flashkick\Services\MatchService;
+use Flashkick\Repository\LobbyRepository;
+use Flashkick\Service\MatchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MatchController extends AbstractController
 {
+    private LobbyRepository $lobbyRepository;
+
+    public function __construct(LobbyRepository $lobbyRepository)
+    {
+        $this->lobbyRepository = $lobbyRepository;
+    }
+
     /**
      * @Route("/match/{match}/details", name="match_details")
      */
@@ -25,10 +32,14 @@ class MatchController extends AbstractController
     /**
      * @Route("/match/{match}/resolve/{player}/{resolution}", name="match_resolve")
      */
-    public function resolve(Match $match, Player $player, int $resolution, MatchService $matchService): JsonResponse
+    public function resolve(Match $match, Player $player, int $resolution, MatchService $matchService): Response
     {
+        $lobby = $this->lobbyRepository->getByMatch($match);
+
+        assert($lobby !== null);
+
         $matchService->resolve($match, $player, $resolution);
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+        return $this->redirectToRoute('flashkick_lobby_join', ['lobby' => $lobby->getId()]);
     }
 }

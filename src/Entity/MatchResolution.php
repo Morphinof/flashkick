@@ -32,7 +32,7 @@ class MatchResolution
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private DateTime $dateValidationP1;
+    private ?DateTime $dateValidationP1;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
@@ -42,7 +42,7 @@ class MatchResolution
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private DateTime $dateValidationP2;
+    private ?DateTime $dateValidationP2;
 
     public function getValidationP1(): ?int
     {
@@ -55,7 +55,7 @@ class MatchResolution
         $this->validationP1 = $validationP1;
     }
 
-    public function getDateValidationP1(): DateTime
+    public function getDateValidationP1(): ?DateTime
     {
         return $this->dateValidationP1;
     }
@@ -71,7 +71,7 @@ class MatchResolution
         $this->validationP2 = $validationP2;
     }
 
-    public function getDateValidationP2(): DateTime
+    public function getDateValidationP2(): ?DateTime
     {
         return $this->dateValidationP1;
     }

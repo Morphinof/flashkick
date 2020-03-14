@@ -2,9 +2,11 @@
 
 namespace Flashkick\Repository;
 
-use Flashkick\Entity\Set;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Flashkick\Entity\Match;
+use Flashkick\Entity\Set;
 
 /**
  * @method Set|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +19,18 @@ class SetRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Set::class);
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function getByMatch(Match $match): ?Set
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.matches contains = :match')
+            ->setParameter('match', $match)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     // /**

@@ -2,22 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Flashkick\Services;
+namespace Flashkick\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Flashkick\Entity\Match;
 use Flashkick\Entity\MatchResolution;
 use Flashkick\Entity\Player;
+use Flashkick\Events\Match\MatchResolvedEvent;
 use InvalidArgumentException;
 use LogicException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class MatchService
 {
     private EntityManagerInterface $manager;
+    private EventDispatcherInterface $dispatcher;
 
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager, EventDispatcherInterface $dispatcher)
     {
         $this->manager = $manager;
+        $this->dispatcher = $dispatcher;
     }
 
     public function resolve(Match $match, Player $player, int $validation): void
@@ -33,11 +37,30 @@ class MatchService
         $resolution = $match->getResolution();
         if ($match->getPlayer1() === $player) {
             $resolution->setValidationP1($validation);
-        } else {
+        }
+
+        if ($match->getPlayer2() === $player) {
             $resolution->setValidationP2($validation);
         }
 
         $this->checkConflicts($match);
+
+        $this->manager->flush();
+
+        if ($match->getResolution()->getValidationP1() !== null && $match->getResolution()->getValidationP2() !== null) {
+            $this->end($match);
+            $this->dispatcher->dispatch(new MatchResolvedEvent($match));
+        }
+    }
+
+    public function end(Match $match): void
+    {
+        $match->setEnded();
+        if ($match->getResolution()->getValidationP1() === MatchResolution::WIN) {
+            $match->setWinner($match->getPlayer1());
+        } else if ($match->getResolution()->getValidationP2() === MatchResolution::WIN) {
+            $match->setWinner($match->getPlayer2());
+        }
 
         $this->manager->flush();
     }
@@ -56,8 +79,6 @@ class MatchService
         $resolution = $match->getResolution();
         if ($resolution->getValidationP1() === $resolution->getValidationP2()) {
             if ($resolution->getDateValidationP1() !== MatchResolution::DRAW) {
-                $this->reset($match);
-
                 throw new LogicException(sprintf('Conflict detected on resolution of match %s', $match->getUuid()));
             }
         }

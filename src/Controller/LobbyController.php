@@ -7,7 +7,7 @@ namespace Flashkick\Controller;
 use Flashkick\Entity\Game;
 use Flashkick\Entity\Lobby;
 use Flashkick\Entity\Player;
-use Flashkick\Services\LobbyService;
+use Flashkick\Service\LobbyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

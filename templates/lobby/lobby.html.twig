@@ -8,6 +8,20 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
+{% macro display_player_resolution(match, player, index) %}
+    {% set validation = attribute(match.resolution, 'validationP' ~ index) %}
+
+    {% if validation is constant('Flashkick\\Entity\\MatchResolution::WIN') %}
+        {{ player }} says won
+    {% elseif validation is constant('Flashkick\\Entity\\MatchResolution::LOOSE') %}
+        {{ player }} says loose
+    {% elseif validation is constant('Flashkick\\Entity\\MatchResolution::DRAW') %}
+        {{ player }} says draw
+    {% else %}
+        waiting for {{ player }}'s validation
+    {% endif %}
+{% endmacro  %}
+
 <div class="example-wrapper">
     <div style="float: left; margin-right:3rem;">
         <h3>Players</h3>
@@ -39,11 +53,24 @@
                         {% elseif not match.ended %}
                             Pending...
                             <div>
-                                {% if app.user.player == match.player1 or app.user.player == match.player2%}
-                                    <a href="#">WON</a>
-                                    <a href="#">LOOSE</a>
+                                {% if app.user.player == match.player1 or app.user.player == match.player2 %}
+                                    {% if (app.user.player == match.player1 and match.resolution.validationP1 is null) or (app.user.player == match.player2 and match.resolution.validationP2 is null) %}
+                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::WIN')}) }}">
+                                            WON
+                                        </a>
+                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::LOOSE')}) }}">
+                                            LOOSE
+                                        </a>
+                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::DRAW')}) }}">
+                                            DRAW
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
+                            <ul>
+                                <li>{{ _self.display_player_resolution(match, match.player1, 1) }}</li>
+                                <li>{{ _self.display_player_resolution(match, match.player2, 2) }}</li>
+                            </ul>
                         {% else %}
                             Draw game
                         {% endif %}

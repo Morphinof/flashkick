@@ -4,8 +4,12 @@ namespace Flashkick\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Flashkick\Entity\Game;
 use Flashkick\Entity\Lobby;
+use Flashkick\Entity\LobbyConfiguration;
+use Flashkick\Entity\Match;
+use Flashkick\Entity\Player;
 
 /**
  * @method Lobby|null find($id, $lockMode = null, $lockVersion = null)
@@ -30,6 +34,34 @@ class LobbyRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
+    }
+
+    public function getByMatch(Match $match): ?Lobby
+    {
+        $sql = <<<SQL
+            SELECT l.id, l.uuid, l.created_at, l.updated_at, l.deleted_at
+            FROM lobby l
+            LEFT JOIN player p ON l.creator_id = p.id
+            LEFT JOIN lobby_configuration l_c ON l.lobby_configuration_id = l_c.id
+            LEFT JOIN lobbies_sets l_s ON l.id = l_s.lobby_id
+            LEFT JOIN sets_matches s_m ON l_s.set_id = s_m.set_id
+            WHERE s_m.match_id = :match;
+SQL;
+
+        $rsm = new ResultSetMapping();
+        $rsm->addEntityResult(Lobby::class, 'l');
+        $rsm->addFieldResult('l','id', 'id');
+        $rsm->addFieldResult('l','uuid', 'uuid');
+        $rsm->addJoinedEntityResult(Player::class, 'p', 'l', 'creator');
+        $rsm->addJoinedEntityResult(LobbyConfiguration::class, 'l_c', 'l', 'configuration');
+        $rsm->addFieldResult('l','created_at', 'createdAt');
+        $rsm->addFieldResult('l','updated_at', 'updatedAt');
+        $rsm->addFieldResult('l','deleted_at', 'deletedAt');
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query->setParameter('match', $match);
+
+        return $query->getOneOrNullResult();
     }
 
     // /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flashkick\Services;
+namespace Flashkick\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Flashkick\Entity\Lobby;
@@ -21,8 +21,19 @@ class LobbyService
 
     public function join(Lobby $lobby, Player $player): void
     {
+        if ($lobby->getPlayers()->contains($player)) {
+            return;
+        }
+
         if ($lobby->getConfiguration()->getMaxPlayers() === $lobby->getPlayers()->count()) {
-            throw new RuntimeException(sprintf('Lobby %s is full', $lobby->getUuid()));
+            $message = sprintf(
+                'Lobby %s is full (%d/%d)',
+                $lobby->getUuid(),
+                $lobby->getPlayers()->count(),
+                $lobby->getConfiguration()->getMaxPlayers(),
+            );
+
+            throw new RuntimeException($message);
         }
 
         $lobby->addPlayer($player);
