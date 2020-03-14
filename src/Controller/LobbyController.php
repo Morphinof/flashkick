@@ -66,7 +66,7 @@ class LobbyController extends AbstractController
     {
         assert($this->getUser() !== null);
 
-        $this->lobbyService->kick($lobby, $this->getUser()->getPlayer());
+        $this->lobbyService->kick($lobby, $player);
 
         return $this->render('lobby/lobby.html.twig', [
             'lobby' => $lobby,

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flashkick\Subscriber;
+namespace Flashkick\Event\Subscriber;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;

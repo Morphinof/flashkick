@@ -9,14 +9,20 @@ use Flashkick\Entity\Lobby;
 use Flashkick\Entity\Player;
 use LogicException;
 use RuntimeException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class LobbyService
 {
     private EntityManagerInterface $manager;
+    private TokenStorageInterface $tokenStorage;
 
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(
+        EntityManagerInterface $manager,
+        TokenStorageInterface $tokenStorage
+    )
     {
         $this->manager = $manager;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function join(Lobby $lobby, Player $player): void
@@ -48,7 +54,13 @@ class LobbyService
 
     public function kick(Lobby $lobby, Player $player): void
     {
-        if ($player !== $lobby->getCreator()) {
+        $token = $this->tokenStorage->getToken();
+        assert($token !== null);
+
+        $user = $token->getUser();
+        assert($user !== null);
+
+        if ($user->getPlayer() !== $lobby->getCreator()) {
             throw new RuntimeException('Kick is restricted to lobby creator');
         }
 
