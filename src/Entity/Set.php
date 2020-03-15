@@ -56,6 +56,7 @@ class Set
     public function addMatch(Match $match): void
     {
         if (!$this->matches->contains($match)) {
+            dump('NEW MATCH ADDED TO MATCH', $match);
             $this->matches[] = $match;
         }
     }

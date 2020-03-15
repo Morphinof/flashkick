@@ -36,10 +36,10 @@ class FlashkickCustomAuthenticator extends AbstractFormLoginAuthenticator implem
         CsrfTokenManagerInterface $csrfTokenManager,
         UserPasswordEncoderInterface $passwordEncoder
     ) {
-        $this->entityManager    = $entityManager;
-        $this->urlGenerator     = $urlGenerator;
+        $this->entityManager = $entityManager;
+        $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder  = $passwordEncoder;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function supports(Request $request): bool
@@ -51,8 +51,8 @@ class FlashkickCustomAuthenticator extends AbstractFormLoginAuthenticator implem
     public function getCredentials(Request $request): array
     {
         $credentials = [
-            'email'      => $request->request->get('email'),
-            'password'   => $request->request->get('password'),
+            'email' => $request->request->get('email'),
+            'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(

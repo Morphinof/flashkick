@@ -23,10 +23,22 @@ class Match
     private Player $player1;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Character::class)
+     * @ORM\JoinColumn(name="player_1_character", referencedColumnName="id", nullable=true)
+     */
+    private ?Character $player1Character;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Player::class)
      * @ORM\JoinColumn(name="player_2", referencedColumnName="id")
      */
     private Player $player2;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Character::class)
+     * @ORM\JoinColumn(name="player_2_character", referencedColumnName="id", nullable=true)
+     */
+    private ?Character $player2Character;
 
     /**
      * @ORM\ManyToOne(targetEntity=Player::class)
@@ -60,6 +72,16 @@ class Match
         $this->player1 = $player1;
     }
 
+    public function getPlayer1Character(): ?Character
+    {
+        return $this->player1Character;
+    }
+
+    public function setPlayer1Character(?Character $player1Character): void
+    {
+        $this->player1Character = $player1Character;
+    }
+
     public function getPlayer2(): Player
     {
         return $this->player2;
@@ -68,6 +90,16 @@ class Match
     public function setPlayer2(Player $player2): void
     {
         $this->player2 = $player2;
+    }
+
+    public function getPlayer2Character(): ?Character
+    {
+        return $this->player2Character;
+    }
+
+    public function setPlayer2Character(?Character $player2Character): void
+    {
+        $this->player2Character = $player2Character;
     }
 
     public function getWinner(): ?Player

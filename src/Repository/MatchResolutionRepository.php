@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Flashkick\Repository;
 
 use Flashkick\Entity\MatchResolution;

@@ -22,6 +22,9 @@
     {% endif %}
 {% endmacro  %}
 
+{% set previousUserCharacter = null %}
+{% set userCharacter = null %}
+
 <div class="example-wrapper">
     <div style="float: left; margin-right:3rem;">
         <h3>Players</h3>
@@ -45,13 +48,51 @@
         {% for set in lobby.sets %}
             <p>Set {{ loop.index }}</p>
             {% for match in set.matches %}
+                {% set player1Character = match.player1Character %}
+                {% set player2Character = match.player2Character %}
+                {% if app.user.player == match.player1 %}
+                    {% set userCharacter = player1Character %}
+                {% elseif app.user.player == match.player2 %}
+                    {% set userCharacter = player2Character %}
+                {% endif %}
+                {% if loop.index == 0 %}
+                    {% set previousUserCharacter = userCharacter %}
+                {% endif %}
                 <ul>
                     <li>
-                        {{ match.player1 }} VS {{ match.player2 }} |
+                        <div>
+                            {{ match.player1 }}
+                            {% if player1Character is not null %}
+                                ({{ player1Character }})
+                            {% endif %}
+                            VS
+                            {{ match.player2 }}
+                            {% if player2Character is not null %}
+                                ({{ player2Character }})
+                            {% endif %}
+                        </div>
                         {% if match.winner is not null %}
                             Winner {{ match.winner }}
                         {% elseif not match.ended %}
-                            Pending...
+                            <div>
+                                <label>
+                                    <select id="character-selector">
+                                        <option value="">Select your character</option>
+                                        {% for character in characters %}
+                                            <option
+                                                value="{{ character.id }}"
+                                                {% if userCharacter is not null and userCharacter == character or previousUserCharacter is not null and previousUserCharacter == character %}selected="selected"{% endif %}
+                                            >
+                                                {{ character }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <button
+                                        id="character-select"
+                                        data-url="{{ path('match_select_character', {'match': match.id, 'player': app.user.player.id, 'character': null}) }}"
+                                    >OK</button>
+                                </label>
+                            </div>
                             <div>
                                 {% if app.user.player == match.player1 or app.user.player == match.player2 %}
                                     {% if (app.user.player == match.player1 and match.resolution.validationP1 is null) or (app.user.player == match.player2 and match.resolution.validationP2 is null) %}
@@ -80,4 +121,26 @@
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let selectCharacterBtn = $('#character-select');
+        selectCharacterBtn.on('click', function (e) {
+            e.preventDefault();
+
+            let characterSelector = $('#character-selector');
+            let url = selectCharacterBtn.data('url')
+            if (characterSelector.val() !== '') {
+                url = url + '/' + characterSelector.val();
+            }
+
+            $.ajax({
+                url: url
+            }).done(function() {
+                document.location.reload();
+            });
+        });
+    </script>
 {% endblock %}

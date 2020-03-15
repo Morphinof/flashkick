@@ -1,0 +1,161 @@
+Flashkick\Entity\Character:
+  character_sf5_abigail:
+    name: Abigail
+    game: '@game_sf5'
+
+  character_sf5_akuma:
+    name: Akuma
+    game: '@game_sf5'
+
+  character_sf5_alex:
+    name: Alex
+    game: '@game_sf5'
+
+  character_sf5_balrog:
+    name: Balrog
+    game: '@game_sf5'
+
+  character_sf5_birdie:
+    name: Birdie
+    game: '@game_sf5'
+
+  character_sf5_blanka:
+    name: Blanka
+    game: '@game_sf5'
+
+  character_sf5_cammy:
+    name: Cammy
+    game: '@game_sf5'
+
+  character_sf5_chun_li:
+    name: Chun-Li
+    game: '@game_sf5'
+
+  character_sf5_cody:
+    name: Cody
+    game: '@game_sf5'
+
+  character_sf5_dhalsim:
+    name: Dhalsim
+    game: '@game_sf5'
+
+  character_sf5_e_honda:
+    name: E. Honda
+    game: '@game_sf5'
+
+  character_sf5_ed:
+    name: Ed
+    game: '@game_sf5'
+
+  character_sf5_fanf:
+    name: F.A.N.G
+    game: '@game_sf5'
+
+  character_sf5_falke:
+    name: Falke
+    game: '@game_sf5'
+
+  character_sf5_g:
+    name: G
+    game: '@game_sf5'
+
+  character_sf5_gill:
+    name: Gill
+    game: '@game_sf5'
+
+  character_sf5_guile:
+    name: Guile
+    game: '@game_sf5'
+
+  character_sf5_ibuki:
+    name: Ibuki
+    game: '@game_sf5'
+
+  character_sf5_juri:
+    name: Juri
+    game: '@game_sf5'
+
+  character_sf5_kage:
+    name: Kage
+    game: '@game_sf5'
+
+  character_sf5_karin:
+    name: Karin
+    game: '@game_sf5'
+
+  character_sf5_ken:
+    name: Ken
+    game: '@game_sf5'
+
+  character_sf5_kolin:
+    name: Kolin
+    game: '@game_sf5'
+
+  character_sf5_laura:
+    name: Laura
+    game: '@game_sf5'
+
+  character_sf5_lucia:
+    name: Lucia
+    game: '@game_sf5'
+
+  character_sf5_m_bison:
+    name: M. Bison
+    game: '@game_sf5'
+
+  character_sf5_menat:
+    name: Menat
+    game: '@game_sf5'
+
+  character_sf5_nash:
+    name: Nash
+    game: '@game_sf5'
+
+  character_sf5_necalli:
+    name: Necalli
+    game: '@game_sf5'
+
+  character_sf5_poison:
+    name: Poison
+    game: '@game_sf5'
+
+  character_sf5_r_mika:
+    name: R. Mika
+    game: '@game_sf5'
+
+  character_sf5_rashid:
+    name: Rashid
+    game: '@game_sf5'
+
+  character_sf5_ryu:
+    name: Ryu
+    game: '@game_sf5'
+
+  character_sf5_sagat:
+    name: Sagat
+    game: '@game_sf5'
+
+  character_sf5_sakura:
+    name: Sakura
+    game: '@game_sf5'
+
+  character_sf5_seth:
+    name: Seth
+    game: '@game_sf5'
+
+  character_sf5_urien:
+    name: Urien
+    game: '@game_sf5'
+
+  character_sf5_vega:
+    name: Vega
+    game: '@game_sf5'
+
+  character_sf5_zangief:
+    name: Zangief
+    game: '@game_sf5'
+
+  character_sf5_zeku:
+    name: Zeku
+    game: '@game_sf5'
+  

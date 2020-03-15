@@ -7,6 +7,7 @@ namespace Flashkick\Controller;
 use Flashkick\Entity\Game;
 use Flashkick\Entity\Lobby;
 use Flashkick\Entity\Player;
+use Flashkick\Repository\CharacterRepository;
 use Flashkick\Service\LobbyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class LobbyController extends AbstractController
 {
     private LobbyService $lobbyService;
+    private CharacterRepository $characterRepository;
 
-    public function __construct(LobbyService $lobbyService)
-    {
+    public function __construct(
+        LobbyService $lobbyService,
+        CharacterRepository $characterRepository
+    ) {
         $this->lobbyService = $lobbyService;
+        $this->characterRepository = $characterRepository;
     }
 
     /**
@@ -41,9 +46,11 @@ class LobbyController extends AbstractController
         assert($this->getUser() !== null);
 
         $this->lobbyService->join($lobby, $this->getUser()->getPlayer());
+        $characters = $this->characterRepository->findBy(['game' => $lobby->getConfiguration()->getGame()]);
 
         return $this->render('lobby/lobby.html.twig', [
             'lobby' => $lobby,
+            'characters' => $characters,
         ]);
     }
 

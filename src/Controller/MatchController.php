@@ -2,6 +2,7 @@
 
 namespace Flashkick\Controller;
 
+use Flashkick\Entity\Character;
 use Flashkick\Entity\Match;
 use Flashkick\Entity\Player;
 use Flashkick\Repository\LobbyRepository;
@@ -13,10 +14,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class MatchController extends AbstractController
 {
     private LobbyRepository $lobbyRepository;
+    private MatchService $matchService;
 
-    public function __construct(LobbyRepository $lobbyRepository)
+    public function __construct(
+        LobbyRepository $lobbyRepository,
+        MatchService $matchService
+    )
     {
         $this->lobbyRepository = $lobbyRepository;
+        $this->matchService = $matchService;
     }
 
     /**
@@ -30,12 +36,24 @@ class MatchController extends AbstractController
     }
 
     /**
+     * @Route("/match/{match}/select-character/{player}/{character}", name="match_select_character", defaults={"character"=null})
+     */
+    public function selectCharacter(Match $match, Player $player, ?Character $character): Response
+    {
+        $lobby = $this->lobbyRepository->getByMatch($match);
+        assert($lobby !== null);
+
+        $this->matchService->selectCharacter($match, $player, $character);
+
+        return $this->redirectToRoute('flashkick_lobby_join', ['lobby' => $lobby->getId()]);
+    }
+
+    /**
      * @Route("/match/{match}/resolve/{player}/{resolution}", name="match_resolve")
      */
     public function resolve(Match $match, Player $player, int $resolution, MatchService $matchService): Response
     {
         $lobby = $this->lobbyRepository->getByMatch($match);
-
         assert($lobby !== null);
 
         $matchService->resolve($match, $player, $resolution);

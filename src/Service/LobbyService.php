@@ -19,8 +19,7 @@ class LobbyService
     public function __construct(
         ManagerRegistry $registry,
         TokenStorageInterface $tokenStorage
-    )
-    {
+    ) {
         $this->registry = $registry;
         $this->tokenStorage = $tokenStorage;
     }

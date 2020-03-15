@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Flashkick\Service;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Flashkick\Entity\Character;
 use Flashkick\Entity\Match;
 use Flashkick\Entity\MatchResolution;
 use Flashkick\Entity\Player;
@@ -45,12 +46,12 @@ class MatchService
 
         $this->checkConflicts($match);
 
-        $this->registry->getManager()->flush();
-
         if ($match->getResolution()->getValidationP1() !== null && $match->getResolution()->getValidationP2() !== null) {
             $this->end($match);
             $this->dispatcher->dispatch(new MatchResolvedEvent($match));
         }
+
+        $this->registry->getManager()->flush();
     }
 
     public function end(Match $match): void
@@ -58,8 +59,10 @@ class MatchService
         $match->setEnded();
         if ($match->getResolution()->getValidationP1() === MatchResolution::WIN) {
             $match->setWinner($match->getPlayer1());
-        } else if ($match->getResolution()->getValidationP2() === MatchResolution::WIN) {
-            $match->setWinner($match->getPlayer2());
+        } else {
+            if ($match->getResolution()->getValidationP2() === MatchResolution::WIN) {
+                $match->setWinner($match->getPlayer2());
+            }
         }
 
         $this->registry->getManager()->flush();
@@ -82,5 +85,18 @@ class MatchService
                 throw new LogicException(sprintf('Conflict detected on resolution of match %s', $match->getUuid()));
             }
         }
+    }
+
+    public function selectCharacter(Match $match, Player $player, ?Character $character = null): void
+    {
+        if ($match->getPlayer1() === $player) {
+            $match->setPlayer1Character($character);
+        }
+
+        if ($match->getPlayer2() === $player) {
+            $match->setPlayer2Character($character);
+        }
+
+        $this->registry->getManager()->flush();
     }
 }
