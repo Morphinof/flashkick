@@ -15,7 +15,7 @@ class MatchResolvedEvent extends Event
 
     public function __construct(Match $match)
     {
-        $this->$match = $match;
+        $this->match = $match;
     }
 
     public function getMatch(): Match

@@ -33,6 +33,17 @@ class Set
      */
     private Collection $matches;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Player::class)
+     * @ORM\JoinColumn(name="winner", referencedColumnName="id", nullable=true)
+     */
+    private ?Player $winner = null;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $ended = false;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
@@ -56,7 +67,6 @@ class Set
     public function addMatch(Match $match): void
     {
         if (!$this->matches->contains($match)) {
-            dump('NEW MATCH ADDED TO MATCH', $match);
             $this->matches[] = $match;
         }
     }
@@ -66,5 +76,25 @@ class Set
         if ($this->matches->contains($set)) {
             $this->matches->removeElement($set);
         }
+    }
+
+    public function getWinner(): ?Player
+    {
+        return $this->winner;
+    }
+
+    public function setWinner(?Player $winner): void
+    {
+        $this->winner = $winner;
+    }
+
+    public function isEnded(): bool
+    {
+        return $this->ended;
+    }
+
+    public function setEnded(bool $ended = true): void
+    {
+        $this->ended = $ended;
     }
 }

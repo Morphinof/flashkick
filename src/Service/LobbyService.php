@@ -6,8 +6,11 @@ namespace Flashkick\Service;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Flashkick\Entity\Lobby;
+use Flashkick\Entity\Match;
 use Flashkick\Entity\Player;
+use Flashkick\Entity\Set;
 use LogicException;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use RuntimeException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -69,5 +72,29 @@ class LobbyService
 
         $lobby->removePlayer($player);
         $this->registry->getManager()->flush();
+    }
+
+    public function getNextAdversary(Lobby $lobby): ?Player
+    {
+        /** @var Set $lastSet */
+        $lastSet = $lobby->getSets()[$lobby->getSets()->count() - 1];
+        assert($lastSet !== null);
+
+        /** @var Match $lastMatch */
+        $lastMatch = $lastSet->getMatches()->last();
+
+        $players = $lobby->getPlayers();
+
+        $players = $players->filter(static function (Player $player) use ($lobby, $lastMatch): Player {
+            if ($player !== $lastMatch->getPlayer1() || $player !== $lastMatch->getPlayer2()) {
+                return $player;
+            }
+
+            return null;
+        });
+
+        $players = array_filter($players->toArray());
+
+        return $players[0] ?? null;
     }
 }

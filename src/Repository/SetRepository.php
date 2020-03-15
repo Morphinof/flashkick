@@ -29,7 +29,7 @@ class SetRepository extends ServiceEntityRepository
     public function getByMatch(Match $match): ?Set
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.matches contains = :match')
+            ->andWhere(':match member of s.matches')
             ->setParameter('match', $match)
             ->getQuery()
             ->getOneOrNullResult();

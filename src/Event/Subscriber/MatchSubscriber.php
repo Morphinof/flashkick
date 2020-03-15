@@ -4,25 +4,34 @@ declare(strict_types=1);
 
 namespace Flashkick\Event\Subscriber;
 
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Flashkick\Entity\Match;
+use Flashkick\Entity\Set;
 use Flashkick\Event\Match\MatchResolvedEvent;
+use Flashkick\Repository\LobbyRepository;
 use Flashkick\Repository\SetRepository;
-use RuntimeException;
+use Flashkick\Service\LobbyService;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MatchSubscriber implements EventSubscriberInterface
 {
     private SetRepository $setRepository;
+    private LobbyRepository $lobbyRepository;
     private ManagerRegistry $registry;
+    private LobbyService $lobbyService;
 
     public function __construct(
         SetRepository $setRepository,
-        ManagerRegistry $registry
+        LobbyRepository $lobbyRepository,
+        ManagerRegistry $registry,
+        LobbyService $lobbyService
     ) {
         $this->setRepository = $setRepository;
+        $this->lobbyRepository = $lobbyRepository;
         $this->registry = $registry;
+        $this->lobbyService = $lobbyService;
     }
 
     public static function getSubscribedEvents(): array
@@ -35,16 +44,19 @@ class MatchSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws NonUniqueResultException
+     * @throws Exception
      */
     public function postMatchValidation(MatchResolvedEvent $event): void
     {
         $match = $event->getMatch();
+        $lobby = $this->lobbyRepository->getByMatch($match);
+        assert($lobby !== null);
+
         // Need to create a new match and checks if the set is ended
         $set = $this->setRepository->getByMatch($match);
 
         if ($set !== null) {
-            // TODO: dispatch a event to do those 2
+            // Creates a new match if needed
             if ($set->getMatches()->count() < $set->getBestOf()) {
                 $next = new Match();
                 $next->setPlayer1($match->getPlayer1());
@@ -55,9 +67,35 @@ class MatchSubscriber implements EventSubscriberInterface
 
                 $this->registry->getManager()->persist($next);
             }
+            // Creates a new set if needed
+            /** @var Set $lastSet */
+            $lastSet = $lobby->getSets()->last();
+            /** @var Match $lastMatch */
+            $lastMatch = $lastSet->getMatches()->last();
 
-            if ($set->getMatches()->count() === $set->getBestOf()) {
-                throw new RuntimeException(sprintf('SET ENDED, NEED TO CREATE A NEW SET'));
+            if ($lastMatch->isEnded() && $lastSet->getMatches()->count() === $set->getBestOf()) {
+                $set->setWinner($match->getWinner());
+                $set->setEnded();
+
+                $newSet = new Set();
+                $newSet->setUuid(Uuid::uuid4()->toString());
+                $newSet->setBestOf($lobby->getConfiguration()->getBestOf());
+                $lobby->addSet($newSet);
+
+                $player1 = $match->getWinner() ?? $match->getPlayer1();
+                $player2 = $this->lobbyService->getNextAdversary($lobby);
+
+                if ($player2 !== null) {
+                    $first = new Match();
+                    $first->setPlayer1($player1);
+                    $first->setPlayer1Character($match->getPlayer1Character());
+                    $first->setPlayer2($player2);
+                    $first->setPlayer2Character($match->getPlayer2Character());
+                    $newSet->addMatch($first);
+
+                    $this->registry->getManager()->persist($newSet);
+                    $this->registry->getManager()->persist($first);
+                }
             }
         }
     }

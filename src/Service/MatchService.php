@@ -48,7 +48,7 @@ class MatchService
 
         if ($match->getResolution()->getValidationP1() !== null && $match->getResolution()->getValidationP2() !== null) {
             $this->end($match);
-            $this->dispatcher->dispatch(new MatchResolvedEvent($match));
+            $this->dispatcher->dispatch(new MatchResolvedEvent($match), MatchResolvedEvent::NAME);
         }
 
         $this->registry->getManager()->flush();

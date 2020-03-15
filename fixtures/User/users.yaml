@@ -1,7 +1,7 @@
 Flashkick\Entity\User:
   user_morphinof:
     email: morphinof@flashkick.com
-    password: admin
+    password: a
     roles: ['ROLE_ADMIN']
     player: '@player_morphinof'
   user_john_doe:
