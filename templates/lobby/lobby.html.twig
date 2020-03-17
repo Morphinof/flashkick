@@ -63,12 +63,12 @@
                         <div>
                             {{ match.player1 }}
                             {% if player1Character is not null %}
-                                ({{ player1Character }})
+                                <img src="{{ player1Character.icon }}" alt="{{ player1Character }}"/>
                             {% endif %}
                             VS
                             {{ match.player2 }}
                             {% if player2Character is not null %}
-                                ({{ player2Character }})
+                                <img src="{{ player2Character.icon }}" alt="{{ player2Character }}"/>
                             {% endif %}
                         </div>
                         {% if match.winner is not null %}
