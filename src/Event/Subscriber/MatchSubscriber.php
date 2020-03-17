@@ -7,6 +7,7 @@ namespace Flashkick\Event\Subscriber;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Flashkick\Entity\Match;
+use Flashkick\Entity\Player;
 use Flashkick\Entity\Set;
 use Flashkick\Event\Match\MatchResolvedEvent;
 use Flashkick\Repository\LobbyRepository;
@@ -72,10 +73,8 @@ class MatchSubscriber implements EventSubscriberInterface
 
             // Creates a new match if needed
             if (!$isWinner && !$isDrawSet) {
-                $next = new Match();
-                $next->setPlayer1($match->getPlayer1());
+                $next = $this->createMatch($match->getPlayer1(), $match->getPlayer2());
                 $next->setPlayer1Character($match->getPlayer1Character());
-                $next->setPlayer2($match->getPlayer2());
                 $next->setPlayer2Character($match->getPlayer2Character());
                 $set->addMatch($next);
 
@@ -96,11 +95,17 @@ class MatchSubscriber implements EventSubscriberInterface
                 $player2 = $this->lobbyService->getNextAdversary($lobby);
 
                 if ($player2 !== null) {
-                    $first = new Match();
-                    $first->setPlayer1($player1);
-                    $first->setPlayer1Character($match->getPlayer1Character());
-                    $first->setPlayer2($player2);
-                    $first->setPlayer2Character($match->getPlayer2Character());
+                    $winnerCharacter = null;
+                    if ($match->getPlayer1() === $match->getWinner()) {
+                        $winnerCharacter = $match->getPlayer1Character();
+                    }
+
+                    if ($match->getPlayer2() === $match->getWinner()) {
+                        $winnerCharacter = $match->getPlayer2Character();
+                    }
+
+                    $first = $this->createMatch($player1, $player2);
+                    $first->setPlayer1Character($winnerCharacter);
                     $newSet->addMatch($first);
 
                     $this->registry->getManager()->persist($newSet);
@@ -108,5 +113,14 @@ class MatchSubscriber implements EventSubscriberInterface
                 }
             }
         }
+    }
+
+    private function createMatch(Player $player1, Player $player2): Match
+    {
+        $match = new Match();
+        $match->setPlayer1($player1);
+        $match->setPlayer2($player2);
+
+        return $match;
     }
 }
