@@ -1,161 +1,201 @@
 Flashkick\Entity\Character:
   character_sf5_abigail:
     name: Abigail
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_akuma:
     name: Akuma
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_alex:
     name: Alex
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_balrog:
     name: Balrog
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_birdie:
     name: Birdie
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_blanka:
     name: Blanka
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_cammy:
     name: Cammy
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_chun_li:
     name: Chun-Li
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_cody:
     name: Cody
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_dhalsim:
     name: Dhalsim
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_e_honda:
     name: E. Honda
+    icon: https://media.eventhubs.com/images/characters/sf5/e-honda.png
     game: '@game_sf5'
 
   character_sf5_ed:
     name: Ed
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_fanf:
     name: F.A.N.G
+    icon: https://media.eventhubs.com/images/characters/sf5/fang.png
     game: '@game_sf5'
 
   character_sf5_falke:
     name: Falke
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_g:
     name: G
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_gill:
     name: Gill
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_guile:
     name: Guile
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_ibuki:
     name: Ibuki
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_juri:
     name: Juri
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_kage:
     name: Kage
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_karin:
     name: Karin
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_ken:
     name: Ken
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_kolin:
     name: Kolin
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_laura:
     name: Laura
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_lucia:
     name: Lucia
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_m_bison:
     name: M. Bison
+    icon: https://media.eventhubs.com/images/characters/sf5/mbison.png
     game: '@game_sf5'
 
   character_sf5_menat:
     name: Menat
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_nash:
     name: Nash
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_necalli:
     name: Necalli
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_poison:
     name: Poison
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_r_mika:
     name: R. Mika
+    icon: https://media.eventhubs.com/images/characters/sf5/m-mika.png
     game: '@game_sf5'
 
   character_sf5_rashid:
     name: Rashid
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_ryu:
     name: Ryu
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_sagat:
     name: Sagat
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_sakura:
     name: Sakura
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_seth:
     name: Seth
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_urien:
     name: Urien
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_vega:
     name: Vega
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_zangief:
     name: Zangief
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
 
   character_sf5_zeku:
     name: Zeku
+    icon: <sprintf('https://media.eventhubs.com/images/characters/sf5/%s.png', @self->name)>
     game: '@game_sf5'
   

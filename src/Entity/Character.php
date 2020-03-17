@@ -6,6 +6,7 @@ namespace Flashkick\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Flashkick\Traits\EntityTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="Flashkick\Repository\CharacterRepository")
@@ -17,9 +18,15 @@ class Character
     use EntityTrait;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
     private string $name;
+
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     * @Assert\Url
+     */
+    private ?string $icon;
 
     /**
      * @ORM\ManyToOne(targetEntity=Game::class)
@@ -40,6 +47,16 @@ class Character
     public function getGame(): Game
     {
         return $this->game;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?string $icon): void
+    {
+        $this->icon = $icon;
     }
 
     public function setGame(Game $game): void
