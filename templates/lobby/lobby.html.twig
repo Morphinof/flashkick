@@ -34,10 +34,10 @@
                     {% if lobby.creator == player %}*{% endif %}
                     {{ player }}
                     {% if app.user.player == player %}
-                        <a href="{{ path('flashkick_lobby_leave', {'lobby': lobby.id}) }}">Leave</a>
+                        <a class="btn btn-primary btn-sm" href="{{ path('flashkick_lobby_leave', {'lobby': lobby.id}) }}">Leave</a>
                     {% endif %}
                     {% if app.user.player == lobby.creator and player != lobby.creator %}
-                        <a href="{{ path('flashkick_lobby_kick', {'lobby': lobby.id, 'player': player.id}) }}">Kick</a>
+                        <a class="btn btn-danger btn-sm" href="{{ path('flashkick_lobby_kick', {'lobby': lobby.id, 'player': player.id}) }}">Kick</a>
                     {% endif %}
                 </li>
             {% endfor %}
@@ -46,7 +46,7 @@
     <div style="float: left;">
         <h3>Sets history</h3>
         {% for set in lobby.sets %}
-            <p>Set {{ loop.index }} (BO{{ set.bestOf }})</p>
+            <p>Set {{ loop.index }} <span class="badge badge-info">BO{{ set.bestOf }}</span></p>
             {% for match in set.matches %}
                 {% set player1Character = match.player1Character %}
                 {% set player2Character = match.player2Character %}
