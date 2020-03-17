@@ -10,7 +10,6 @@ use Flashkick\Entity\Match;
 use Flashkick\Entity\Player;
 use Flashkick\Entity\Set;
 use LogicException;
-use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use RuntimeException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -77,7 +76,7 @@ class LobbyService
     public function getNextAdversary(Lobby $lobby): ?Player
     {
         /** @var Set $lastSet */
-        $lastSet = $lobby->getSets()[$lobby->getSets()->count() - 1];
+        $lastSet = $lobby->getSets()[$lobby->getSets()->count() - 2] ?? $lobby->getSets()->first();
         assert($lastSet !== null);
 
         /** @var Match $lastMatch */
@@ -85,16 +84,27 @@ class LobbyService
 
         $players = $lobby->getPlayers();
 
-        $players = $players->filter(static function (Player $player) use ($lobby, $lastMatch): Player {
-            if ($player !== $lastMatch->getPlayer1() || $player !== $lastMatch->getPlayer2()) {
+        $adversaries = $players->filter(static function (Player $player) use ($lastMatch): ?Player {
+            if ($player !== $lastMatch->getPlayer1() && $player !== $lastMatch->getPlayer2()) {
                 return $player;
             }
 
             return null;
         });
 
-        $players = array_filter($players->toArray());
+        if ($adversaries->count() > 0) {
+            return $adversaries->first();
+        }
 
-        return $players[0] ?? null;
+        $nextPlayer = $lastMatch->getPlayer1();
+        if ($adversaries->count() === 0 && $lastMatch->getWinner() === $nextPlayer) {
+            $nextPlayer = $lastMatch->getPlayer2();
+        }
+
+        if ($lobby->getPlayers()->contains($nextPlayer)) {
+            return $nextPlayer;
+        }
+
+        return null;
     }
 }

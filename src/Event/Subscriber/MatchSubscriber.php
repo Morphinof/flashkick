@@ -52,12 +52,26 @@ class MatchSubscriber implements EventSubscriberInterface
         $lobby = $this->lobbyRepository->getByMatch($match);
         assert($lobby !== null);
 
-        // Need to create a new match and checks if the set is ended
         $set = $this->setRepository->getByMatch($match);
 
+        // Need to create a new match and checks if the set is ended
         if ($set !== null) {
+            $winsP1 = $set->countResolutionsByPlayer($match->getPlayer1());
+            $winsP2 = $set->countResolutionsByPlayer($match->getPlayer2());
+            $isWinner = $winsP1 === $set->getBestOf() - 1 || $winsP2 === $set->getBestOf() - 1;
+
+            if ($isWinner) {
+                $set->setWinner($match->getWinner());
+            }
+
+            // Close the set if won or draw
+            $isDrawSet = $set->getMatches()->count() === $set->getBestOf() && $set->getWinner() === null;
+            if ($isDrawSet || $isWinner) {
+                $set->setEnded();
+            }
+
             // Creates a new match if needed
-            if ($set->getMatches()->count() < $set->getBestOf()) {
+            if (!$isWinner && !$isDrawSet) {
                 $next = new Match();
                 $next->setPlayer1($match->getPlayer1());
                 $next->setPlayer1Character($match->getPlayer1Character());
@@ -67,13 +81,9 @@ class MatchSubscriber implements EventSubscriberInterface
 
                 $this->registry->getManager()->persist($next);
             }
-            // Creates a new set if needed
-            /** @var Set $lastSet */
-            $lastSet = $lobby->getSets()->last();
-            /** @var Match $lastMatch */
-            $lastMatch = $lastSet->getMatches()->last();
 
-            if ($lastMatch->isEnded() && $lastSet->getMatches()->count() === $set->getBestOf()) {
+            // Creates a new set with the next match if needed
+            if ($set->getWinner() !== null) {
                 $set->setWinner($match->getWinner());
                 $set->setEnded();
 

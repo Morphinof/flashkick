@@ -97,4 +97,20 @@ class Set
     {
         $this->ended = $ended;
     }
+
+    public function countResolutionsByPlayer(?Player $player = null, int $resolution = MatchResolution::WIN): int
+    {
+        $count = 0;
+        foreach ($this->matches as $match) {
+            if ($player === $match->getPlayer1() && $match->getResolution()->getValidationP1() === $resolution) {
+                ++$count;
+            }
+
+            if ($player === $match->getPlayer2() && $match->getResolution()->getValidationP2() === $resolution) {
+                ++$count;
+            }
+        }
+
+        return $count;
+    }
 }

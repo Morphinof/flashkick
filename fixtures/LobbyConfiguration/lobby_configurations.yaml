@@ -3,9 +3,9 @@ Flashkick\Entity\LobbyConfiguration:
     admin: '@player_bob'
     game: '@game_sf5'
     maxPlayers: 5
-    bestOf: 3
+    bestOf: 4
   lobby_configuration_lobby_private_morphinof:
     admin: '@player_morphinof'
     game: '@game_sf5'
     maxPlayers: 3
-    bestOf: 2
+    bestOf: 3

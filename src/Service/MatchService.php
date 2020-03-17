@@ -59,9 +59,18 @@ class MatchService
         $match->setEnded();
         if ($match->getResolution()->getValidationP1() === MatchResolution::WIN) {
             $match->setWinner($match->getPlayer1());
-        } else {
-            if ($match->getResolution()->getValidationP2() === MatchResolution::WIN) {
-                $match->setWinner($match->getPlayer2());
+        } else if ($match->getResolution()->getValidationP2() === MatchResolution::WIN) {
+            $match->setWinner($match->getPlayer2());
+        }
+
+        // Not sure to keep this logic, maybe it better to trigger a conflict
+        if ($match->getWinner() !== null) {
+            if ($match->getResolution()->getValidationP1() === MatchResolution::DRAW) {
+                $match->getResolution()->setValidationP1(MatchResolution::LOOSE);
+            }
+
+            if ($match->getResolution()->getValidationP2() === MatchResolution::DRAW) {
+                $match->getResolution()->setValidationP2(MatchResolution::LOOSE);
             }
         }
 
