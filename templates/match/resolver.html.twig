@@ -1,0 +1,11 @@
+{% if (app.user.player == match.player1 and match.resolution.validationP1 is null) or (app.user.player == match.player2 and match.resolution.validationP2 is null) %}
+    <a class="btn btn-success" href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::WIN')}) }}">
+        WON
+    </a>
+    <a class="btn btn-danger" href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::LOOSE')}) }}">
+        LOOSE
+    </a>
+    <a class="btn btn-primary" href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::DRAW')}) }}">
+        DRAW
+    </a>
+{% endif %}

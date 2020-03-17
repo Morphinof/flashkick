@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-bootstrap.html.twig' %}
 
 {% block title %}Hello LobbyController!{% endblock %}
 
@@ -75,43 +75,9 @@
                             Winner {{ match.winner }}
                         {% elseif not match.ended %}
                             {% if app.user.player == match.player1 or app.user.player == match.player2 %}
-                                <div>
-                                    <label>
-                                        <select id="character-selector">
-                                            <option value="">Select your character</option>
-                                            {% for character in characters %}
-                                                <option
-                                                    value="{{ character.id }}"
-                                                    {% if userCharacter is not null and userCharacter == character or previousUserCharacter is not null and previousUserCharacter == character %}
-                                                        selected="selected"
-                                                    {% endif %}
-                                                >
-                                                    {{ character }}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
-                                        <button
-                                                id="character-select"
-                                                data-url="{{ path('match_select_character', {'match': match.id, 'player': app.user.player.id, 'character': null}) }}"
-                                        >OK</button>
-                                    </label>
-                                </div>
+                                {% include 'match/resolver.html.twig' with {'match': match} %}
+                                {% include 'character/selector.html.twig' with {'previousUserCharacter': previousUserCharacter, 'userCharacter': userCharacter} %}
                             {% endif %}
-                            <div>
-                                {% if app.user.player == match.player1 or app.user.player == match.player2 %}
-                                    {% if (app.user.player == match.player1 and match.resolution.validationP1 is null) or (app.user.player == match.player2 and match.resolution.validationP2 is null) %}
-                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::WIN')}) }}">
-                                            WON
-                                        </a>
-                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::LOOSE')}) }}">
-                                            LOOSE
-                                        </a>
-                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::DRAW')}) }}">
-                                            DRAW
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
                             <ul>
                                 <li>{{ _self.display_player_resolution(match, match.player1, 1) }}</li>
                                 <li>{{ _self.display_player_resolution(match, match.player2, 2) }}</li>
@@ -130,12 +96,21 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        let selectCharacterBtn = $('#character-select');
-        selectCharacterBtn.on('click', function (e) {
-            e.preventDefault();
+        $(document).ready(function () {
+            $(".dropdown-menu").on('click', 'a', function(e) {
+                e.preventDefault();
 
+                $(".btn:first-child").text($(this).text());
+                $(".btn:first-child").val($(this).data('character-id'));
+
+                selectCharacter(e.target);
+            });
+        });
+
+        function selectCharacter(a) {
+            console.log('selectCharacter');
             let characterSelector = $('#character-selector');
-            let url = selectCharacterBtn.data('url')
+            let url = a.href;
             if (characterSelector.val() !== '') {
                 url = url + '/' + characterSelector.val();
             }
@@ -145,6 +120,6 @@
             }).done(function() {
                 document.location.reload();
             });
-        });
+        }
     </script>
 {% endblock %}
