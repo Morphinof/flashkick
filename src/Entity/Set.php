@@ -98,6 +98,18 @@ class Set
         $this->ended = $ended;
     }
 
+    public function isDraw(): bool
+    {
+        $count = 0;
+        foreach ($this->matches as $match) {
+            if ($match->getWinner() === null) {
+                ++$count;
+            }
+        }
+
+        return $count === $this->bestOf - 1;
+    }
+
     public function countResolutionsByPlayer(?Player $player = null, int $resolution = MatchResolution::WIN): int
     {
         $count = 0;

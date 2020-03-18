@@ -66,7 +66,7 @@ class MatchSubscriber implements EventSubscriberInterface
             }
 
             // Close the set if won or draw
-            $isDrawSet = $set->getMatches()->count() === $set->getBestOf() && $set->getWinner() === null;
+            $isDrawSet = $set->isDraw();
             if ($isDrawSet || $isWinner) {
                 $set->setEnded();
             }
