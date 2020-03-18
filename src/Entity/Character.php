@@ -66,6 +66,6 @@ class Character
 
     public function __toString(): string
     {
-        return $this->name;
+        return ucwords($this->name);
     }
 }
