@@ -3,7 +3,7 @@
     <button class="btn btn-info dropdown-toggle" type="button" id="character-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {% for character in characters %}
             {% if userCharacter is not null and userCharacter == character or previousUserCharacter is not null and previousUserCharacter == character %}
-                {{ character|capitalize  }}
+                {{ character }}
                 {% set selected = true %}
             {% endif %}
         {% endfor %}
@@ -18,7 +18,7 @@
                 href="{{ path('match_select_character', {'match': match.id, 'player': app.user.player.id, 'character': null}) }}"
                 data-character-id="{{ character.id }}"
             >
-                {{ character|capitalize }}
+                {{ character }}
             </a>
         {% endfor %}
     </div>
