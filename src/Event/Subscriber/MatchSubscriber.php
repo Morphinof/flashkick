@@ -82,7 +82,7 @@ class MatchSubscriber implements EventSubscriberInterface
             }
 
             // Creates a new set with the next match if needed
-            if ($set->getWinner() !== null) {
+            if ($isDrawSet || $set->getWinner() !== null) {
                 $set->setWinner($match->getWinner());
                 $set->setEnded();
 
