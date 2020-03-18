@@ -133,8 +133,12 @@
                     {% endfor %}
                     {% if set.ended %}
                         <div style="text-align: center; margin-bottom: 0.5rem;">
-                            {{ set.winner }} won
-                            {{ set.countResolutionsByPlayer(set.matches.first.player1) }} / {{ set.countResolutionsByPlayer(set.matches.first.player2) }}
+                            {% if not set.isDraw %}
+                                {{ set.winner }} won
+                                {{ set.countResolutionsByPlayer(set.matches.first.player1) }} / {{ set.countResolutionsByPlayer(set.matches.first.player2) }}
+                            {% else %}
+                                Draw set !
+                            {% endif %}
                         </div>
                     {% endif %}
                 </li>
