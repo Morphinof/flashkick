@@ -100,14 +100,18 @@ class Set
 
     public function isDraw(): bool
     {
-        $count = 0;
+        $draws = 0;
         foreach ($this->matches as $match) {
+            if ($match->getWinner() !== null) {
+                return false;
+            }
+
             if ($match->getWinner() === null) {
-                ++$count;
+                ++$draws;
             }
         }
 
-        return $count === $this->bestOf - 1;
+        return $draws === $this->bestOf - 1;
     }
 
     public function countResolutionsByPlayer(?Player $player = null, int $resolution = MatchResolution::WIN): int
