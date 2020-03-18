@@ -107,7 +107,11 @@
                                     {% elseif not match.ended %}
                                         {% if app.user.player == match.player1 or app.user.player == match.player2 %}
                                             {% include 'match/resolver.html.twig' with {'match': match} %}
-                                            {% include 'character/selector.html.twig' with {'previousUserCharacter': previousUserCharacter, 'userCharacter': userCharacter} %}
+                                            {% if (app.user.player == match.player1 and match.resolution.validationP1 is null) or
+                                                (app.user.player == match.player2 and match.resolution.validationP2 is null)
+                                            %}
+                                                {% include 'character/selector.html.twig' with {'previousUserCharacter': previousUserCharacter, 'userCharacter': userCharacter} %}
+                                            {% endif %}
                                         {% endif %}
                                         <div style="margin-top: 1rem;">
                                             <ul class="list-group">
