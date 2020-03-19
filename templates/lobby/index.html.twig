@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LobbyController!{% endblock %}
+{% block title %}Lobbies{% endblock %}
 
 {% block body %}
 <style>
@@ -12,8 +12,23 @@
     <ul>
         {% for lobby in lobbies %}
             <li>
-                {{ lobby }}
-                <a href="{{ path('flashkick_lobby_join', {'lobby': lobby.id}) }}">Join</a>
+                <p>{{ lobby }}</p>
+                <ul>
+                    {% for player in lobby.players %}
+                        <li>{{ player }}</li>
+                    {% endfor %}
+                </ul>
+                <p>
+                    {{ lobby.sets.count() }} set(s),
+                    {{ lobby.countMatches() }} match(s),
+                    Created by {{ lobby.creator }}
+                </p>
+                <div style="margin-top: 1rem;">
+                    <a href="{{ path('flashkick_lobby_join', {'lobby': lobby.id}) }}">Join</a>
+                    {% if lobby.players.contains(app.user.player) %}
+                        <a class="btn btn-primary btn-sm" href="{{ path('flashkick_lobby_leave', {'lobby': lobby.id}) }}">Leave</a>
+                    {% endif %}
+                </div>
             </li>
         {% endfor %}
     </ul>

@@ -129,15 +129,23 @@ class Lobby
         $this->mode = $mode;
     }
 
+    public function countMatches(): int
+    {
+        $count = 0;
+        foreach ($this->sets as $set) {
+            $count += $set->getMatches()->count();
+        }
+
+        return $count;
+    }
+
     public function __toString(): string
     {
         return sprintf(
-            '%s [%d/%d] players - %d match(s) done - created by %s',
+            '%s [%d/%d]',
             $this->configuration->getGame(),
             $this->players->count(),
             $this->configuration->getMaxPlayers(),
-            $this->sets->count(),
-            $this->creator
         );
     }
 }
