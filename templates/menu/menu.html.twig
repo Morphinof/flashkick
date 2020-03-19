@@ -1,0 +1,18 @@
+<ul class="nav nav-pills">
+    <li class="nav-item dropdown">
+        <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            Lobbies by game
+        </a>
+        <div class="dropdown-menu">
+            {% for game in flashkick_games() %}
+                {% set lobbies = flashkick_lobbies_by_game(game) %}
+                <a class="dropdown-item" href="{{ path('flashkick_lobbies', {'game': game.id}) }}">
+                    {{ game }}
+                    {% if lobbies|length > 0 %}
+                        ({{ lobbies|length }})
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    </li>
+</ul>
