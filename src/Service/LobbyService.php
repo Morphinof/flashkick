@@ -9,6 +9,7 @@ use Flashkick\Entity\Lobby;
 use Flashkick\Entity\Match;
 use Flashkick\Entity\Player;
 use Flashkick\Entity\Set;
+use Flashkick\Repository\LobbyRepository;
 use LogicException;
 use RuntimeException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -17,17 +18,22 @@ class LobbyService
 {
     private ManagerRegistry $registry;
     private TokenStorageInterface $tokenStorage;
+    private LobbyRepository $lobbyRepository;
 
     public function __construct(
         ManagerRegistry $registry,
-        TokenStorageInterface $tokenStorage
+        TokenStorageInterface $tokenStorage,
+        LobbyRepository $lobbyRepository
     ) {
         $this->registry = $registry;
         $this->tokenStorage = $tokenStorage;
+        $this->lobbyRepository = $lobbyRepository;
     }
 
     public function join(Lobby $lobby, Player $player): void
     {
+        $this->autoLeave($player);
+
         if ($lobby->getPlayers()->contains($player)) {
             return;
         }
@@ -106,5 +112,14 @@ class LobbyService
         }
 
         return null;
+    }
+
+    private function autoLeave(Player $player): void
+    {
+        $lobby = $this->lobbyRepository->findByPlayer($player);
+
+        if ($lobby !== null) {
+            $this->leave($lobby, $player);
+        }
     }
 }

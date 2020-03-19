@@ -10,6 +10,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Flashkick\Entity\Game;
 use Flashkick\Entity\Lobby;
 use Flashkick\Entity\Match;
+use Flashkick\Entity\Player;
 
 /**
  * @method Lobby|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,7 +32,7 @@ class LobbyRepository extends ServiceEntityRepository
             ->andWhere('l_c.game = :game')
             ->setParameter('game', $game)
             ->orderBy('l.createdAt', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults(100)
             ->getQuery()
             ->getResult();
     }
@@ -45,6 +46,18 @@ class LobbyRepository extends ServiceEntityRepository
             ->leftJoin('l.sets', 'l_s')
             ->andWhere(':match member of l_s.matches')
             ->setParameter('match', $match)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findByPlayer(Player $player): ?Lobby
+    {
+        return $this->createQueryBuilder('l')
+            ->leftJoin('l.sets', 'l_s')
+            ->leftJoin('l_s.matches', 'l_m')
+            ->andWhere('l_m.player1 = :player')
+            ->orWhere('l_m.player2 = :player')
+            ->setParameter('player', $player)
             ->getQuery()
             ->getOneOrNullResult();
     }
