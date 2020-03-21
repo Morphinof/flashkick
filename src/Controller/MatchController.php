@@ -53,7 +53,7 @@ class MatchController extends AbstractController
      */
     public function resolve(Match $match, Player $player, int $resolution, MatchService $matchService): Response
     {
-        $lobby = $this->lobbyRepository->getByMatch($match);
+        $lobby = $this->lobbyRepository->findByMatch($match);
         assert($lobby !== null);
 
         $matchService->resolve($match, $player, $resolution);

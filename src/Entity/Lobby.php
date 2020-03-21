@@ -100,6 +100,9 @@ class Lobby
         }
     }
 
+    /**
+     * @return Set[]|Collection
+     */
     public function getSets(): Collection
     {
         return $this->sets;

@@ -7,6 +7,7 @@ namespace Flashkick\Repository;
 use Flashkick\Entity\Match;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Flashkick\Entity\Player;
 
 /**
  * @method Match|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +20,24 @@ class MatchRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Match::class);
+    }
+
+    /**
+     * @return Match[]
+     */
+    public function findByPlayer(Player $player, bool $winOnly = false): iterable
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb
+            ->andWhere($qb->expr()->orX('m.player1 = :player', 'm.player2 = :player'))
+            ->setParameter('player', $player)
+            ->orderBy('m.createdAt', 'DESC');
+
+        if ($winOnly) {
+            $qb->andWhere('m.winner = :player');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     // /**

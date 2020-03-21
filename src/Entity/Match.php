@@ -136,4 +136,13 @@ class Match
     {
         return $this->player1 === $player || $this->player2 === $player;
     }
+
+    public function isDraw(): bool
+    {
+        if ($this->resolution === null) {
+            return false;
+        }
+
+        return $this->resolution->isDraw();
+    }
 }

@@ -1,4 +1,4 @@
-{% extends 'base-bootstrap.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Welcome on Flashkick !{% endblock %}
 
@@ -10,5 +10,25 @@
 
 <div class="example-wrapper">
     WELCOME ON FLASHKICK !
+    <ul>
+        {% for name, stats in global_stats %}
+            <li>
+                {{ name }}
+                <ul>
+                    {% for n, stat in stats %}
+                        <li>{{ n }}: {{ stat }}{% if n == 'ratio' %}%{% endif %}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li>
+               sf5_stats
+                <ul>
+                    {% for n, stat in sf5_stats %}
+                        <li>{{ n }}: {{ stat }}{% if n == 'ratio' %}%{% endif %}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
