@@ -11,25 +11,32 @@
 <div class="example-wrapper">
     <ul>
         {% for lobby in lobbies %}
-            <li>
-                <p>{{ lobby }}</p>
-                <ul>
-                    {% for player in lobby.players %}
-                        <li>{{ player }}</li>
-                    {% endfor %}
-                </ul>
-                <p>
-                    {{ lobby.sets.count() }} set(s),
-                    {{ lobby.countMatches() }} match(s),
-                    Created by {{ lobby.creator }}
-                </p>
-                <div style="margin-top: 1rem;">
-                    <a class="btn btn-primary btn-sm" href="{{ path('flashkick_lobby_join', {'lobby': lobby.id}) }}">Join</a>
-                    {% if lobby.players.contains(app.user.player) %}
-                        <a class="btn btn-danger btn-sm" href="{{ path('flashkick_lobby_leave', {'lobby': lobby.id}) }}">Leave</a>
+            {% set isPrivate = lobby.mode is constant('MODE_PRIVATE', lobby) %}
+
+            {% if not isPrivate or lobby.creator == app.user.player or (isPrivate and app.user.player in lobby.players) %}
+                <li>
+                    <p>{{ lobby }}</p>
+                    {% if isPrivate %}
+                        <span class="badge badge-danger" style="float: right;">Private</span>
                     {% endif %}
-                </div>
-            </li>
+                    <ul>
+                        {% for player in lobby.players %}
+                            <li>{{ player }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p>
+                        {{ lobby.sets.count() }} set(s),
+                        {{ lobby.countMatches() }} match(s),
+                        Created by {{ lobby.creator }}
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <a class="btn btn-primary btn-sm" href="{{ path('flashkick_lobby_join', {'lobby': lobby.id}) }}">Join</a>
+                        {% if lobby.players.contains(app.user.player) %}
+                            <a class="btn btn-danger btn-sm" href="{{ path('flashkick_lobby_leave', {'lobby': lobby.id}) }}">Leave</a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
 </div>
