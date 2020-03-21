@@ -67,7 +67,7 @@ class StatsService
             'wins' => $wins,
             'loses' => $loses,
             'draws' => $draws,
-            'ratio' => $wins > 0 ? $wins / ($loses + $draws) * 100 : 0,
+            'ratio' => $wins > 0 ? round($wins / ($wins + $loses + $draws) * 100) : 0,
             'total' => $wins + $loses + $draws,
         ];
     }
@@ -106,7 +106,7 @@ class StatsService
             'wins' => $wins,
             'loses' => $loses,
             'draws' => $draws,
-            'ratio' => $wins > 0 ? $wins / ($loses + $draws) * 100 : 0,
+            'ratio' => $wins > 0 ? round($wins / ($wins + $loses + $draws) * 100) : 0,
             'total' => $wins + $loses + $draws,
         ];
     }
