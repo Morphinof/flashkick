@@ -26,19 +26,23 @@ class StatsService
     {
         $globals = $this->getGlobalWinsLosesDraws($player);
 
-        return ['global_wld' => $globals,];
+        return ['globals' => $globals,];
     }
 
     public function getGameStatistics(Player $player, Game $game): iterable
     {
         $wins = 0;
-        $losses = 0;
+        $loses = 0;
         $draws = 0;
         $lobbies = $this->lobbyRepository->findByPlayerAndGame($player, $game);
 
         foreach ($lobbies as $lobby) {
             foreach ($lobby->getSets() as $set) {
                 foreach ($set->getMatches() as $match) {
+                    if (!$match->isEnded()) {
+                        continue;
+                    }
+
                     if ($match->getWinner() === $player) {
                         ++$wins;
                         continue;
@@ -49,28 +53,32 @@ class StatsService
                         continue;
                     }
 
-                    ++$losses;
+                    ++$loses;
                 }
             }
         }
 
         return [
             'wins' => $wins,
-            'losses' => $losses,
+            'loses' => $loses,
             'draws' => $draws,
-            'ratio' => $wins / ($losses + $draws) * 100,
-            'total' => $wins + $losses + $draws,
+            'ratio' => $wins / ($loses + $draws) * 100,
+            'total' => $wins + $loses + $draws,
         ];
     }
 
     public function getGlobalWinsLosesDraws(Player $player): iterable
     {
         $wins = 0;
-        $losses = 0;
+        $loses = 0;
         $draws = 0;
         $matches = $this->matchRepository->findByPlayer($player);
 
         foreach ($matches as $match) {
+            if (!$match->isEnded()) {
+                continue;
+            }
+
             if ($match->getWinner() === $player) {
                 ++$wins;
                 continue;
@@ -81,15 +89,15 @@ class StatsService
                 continue;
             }
 
-            ++$losses;
+            ++$loses;
         }
 
         return [
             'wins' => $wins,
-            'losses' => $losses,
+            'loses' => $loses,
             'draws' => $draws,
-            'ratio' => $wins / ($losses + $draws) * 100,
-            'total' => $wins + $losses + $draws,
+            'ratio' => $wins / ($loses + $draws) * 100,
+            'total' => $wins + $loses + $draws,
         ];
     }
 }
