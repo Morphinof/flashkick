@@ -75,4 +75,10 @@ class MatchResolution
     {
         return $this->dateValidationP1;
     }
+
+    public function isDraw(): bool
+    {
+        return $this->validationP1 !== null && $this->validationP1 === self::DRAW
+            && $this->validationP2 !== null && $this->validationP2 === self::DRAW;
+    }
 }

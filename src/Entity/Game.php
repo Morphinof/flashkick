@@ -15,6 +15,8 @@ class Game
 {
     use EntityWithUuidTrait;
 
+    public const GAME_SF5 = 'sf5';
+
     /**
      * @ORM\Column(type="string", length=255)
      */

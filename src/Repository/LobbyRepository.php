@@ -11,6 +11,7 @@ use Flashkick\Entity\Game;
 use Flashkick\Entity\Lobby;
 use Flashkick\Entity\Match;
 use Flashkick\Entity\Player;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Lobby|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,14 +26,38 @@ class LobbyRepository extends ServiceEntityRepository
         parent::__construct($registry, Lobby::class);
     }
 
-    public function findByGame(Game $game): array
+    public function findByGame(Game $game): iterable
     {
         return $this->createQueryBuilder('l')
             ->leftJoin('l.configuration', 'l_c')
             ->andWhere('l_c.game = :game')
             ->setParameter('game', $game)
             ->orderBy('l.createdAt', 'ASC')
-            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Lobby[]
+     */
+    public function findByPlayerAndGame(Player $player, ?Game $game): iterable
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb
+            ->leftJoin('l.configuration', 'l_c')
+            ->leftJoin('l.sets', 'l_s')
+            ->leftJoin('l_s.matches', 'l_m')
+            ->andWhere($qb->expr()->orX('l_m.player1 = :player', 'l_m.player2 = :player'))
+            ->setParameter('player', $player)
+            ->orderBy('l.createdAt', 'ASC');
+
+        if ($game !== null) {
+            $qb
+                ->andWhere('l_c.game = :game')
+                ->setParameter('game', $game);
+        }
+
+        return $qb
             ->getQuery()
             ->getResult();
     }
@@ -40,7 +65,7 @@ class LobbyRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
-    public function getByMatch(Match $match): ?Lobby
+    public function findByMatch(Match $match): ?Lobby
     {
         return $this->createQueryBuilder('l')
             ->leftJoin('l.sets', 'l_s')
