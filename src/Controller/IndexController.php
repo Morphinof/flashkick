@@ -33,10 +33,12 @@ class IndexController extends AbstractController
 
         $globalStats = $this->statsService->getGlobalStatistics($player);
         $sf5Stats = $this->statsService->getGameStatistics($player, $sf5);
+        $sf5BestsCharacters = $this->statsService->getCharactersStatistics($player, $sf5);
 
         return $this->render('index/index.html.twig', [
             'global_stats' => $globalStats,
             'sf5_stats' => $sf5Stats,
+            'sf5_bests_characters' => $sf5BestsCharacters,
         ]);
     }
 }

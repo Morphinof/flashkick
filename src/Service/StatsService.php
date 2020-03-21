@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Flashkick\Service;
 
+use Flashkick\Entity\Character;
 use Flashkick\Entity\Game;
 use Flashkick\Entity\Player;
+use Flashkick\Repository\CharacterRepository;
 use Flashkick\Repository\LobbyRepository;
 use Flashkick\Repository\MatchRepository;
 
@@ -13,13 +15,16 @@ class StatsService
 {
     private LobbyRepository $lobbyRepository;
     private MatchRepository $matchRepository;
+    private CharacterRepository $characterRepository;
 
     public function __construct(
         LobbyRepository $lobbyRepository,
-        MatchRepository $matchRepository
+        MatchRepository $matchRepository,
+        CharacterRepository $characterRepository
     ) {
         $this->matchRepository = $matchRepository;
         $this->lobbyRepository = $lobbyRepository;
+        $this->characterRepository = $characterRepository;
     }
 
     public function getGlobalStatistics(Player $player): iterable
@@ -62,9 +67,14 @@ class StatsService
             'wins' => $wins,
             'loses' => $loses,
             'draws' => $draws,
-            'ratio' => $wins / ($loses + $draws) * 100,
+            'ratio' => $wins > 0 ? $wins / ($loses + $draws) * 100 : 0,
             'total' => $wins + $loses + $draws,
         ];
+    }
+
+    public function getCharactersStatistics(Player $player, Game $game): iterable
+    {
+        return $this->characterRepository->getCharactersStatistics($player, $game);
     }
 
     public function getGlobalWinsLosesDraws(Player $player): iterable
@@ -96,7 +106,7 @@ class StatsService
             'wins' => $wins,
             'loses' => $loses,
             'draws' => $draws,
-            'ratio' => $wins / ($loses + $draws) * 100,
+            'ratio' => $wins > 0 ? $wins / ($loses + $draws) * 100 : 0,
             'total' => $wins + $loses + $draws,
         ];
     }

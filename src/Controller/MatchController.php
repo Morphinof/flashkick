@@ -40,7 +40,7 @@ class MatchController extends AbstractController
      */
     public function selectCharacter(Match $match, Player $player, ?Character $character): Response
     {
-        $lobby = $this->lobbyRepository->getByMatch($match);
+        $lobby = $this->lobbyRepository->findByMatch($match);
         assert($lobby !== null);
 
         $this->matchService->selectCharacter($match, $player, $character);
