@@ -59,6 +59,9 @@ class Set
         $this->bestOf = $bestOf;
     }
 
+    /**
+     * @return Match[]|Collection
+     */
     public function getMatches(): Collection
     {
         return $this->matches;
