@@ -50,7 +50,7 @@ class MatchSubscriber implements EventSubscriberInterface
     public function postMatchValidation(MatchResolvedEvent $event): void
     {
         $match = $event->getMatch();
-        $lobby = $this->lobbyRepository->getByMatch($match);
+        $lobby = $this->lobbyRepository->findByMatch($match);
         assert($lobby !== null);
 
         $set = $this->setRepository->getByMatch($match);
