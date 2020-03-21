@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-bootstrap.html.twig' %}
 
 {% block title %}Welcome on Flashkick !{% endblock %}
 
@@ -14,21 +14,123 @@
         {% for name, stats in global_stats %}
             <li>
                 {{ name }}
-                <ul>
+                <ul style="display: table;">
                     {% for n, stat in stats %}
-                        <li>{{ n }}: {{ stat }}{% if n == 'ratio' %}%{% endif %}</li>
+                        <li style="display: table-cell;">{{ n }}: {{ stat }}{% if n == 'ratio' %}%{% endif %}</li>
                     {% endfor %}
                 </ul>
             </li>
             <li>
                sf5_stats
-                <ul>
+                <ul style="display: table;">
                     {% for n, stat in sf5_stats %}
-                        <li>{{ n }}: {{ stat }}{% if n == 'ratio' %}%{% endif %}</li>
+                        <li style="display: table-cell;">{{ n }}: {{ stat }}{% if n == 'ratio' %}%{% endif %}</li>
                     {% endfor %}
                 </ul>
             </li>
         {% endfor %}
+        <div></div>
     </ul>
+    <div style="width: 100%; height: 10rem;"">
+        <div style="float: left; width: 10rem; height: 10rem;">
+            <canvas id="global-ratio-canvas" width="100%" height="100%"></canvas>
+        </div>
+        <div style="float: left; width: 10rem; height: 10rem;">
+            <canvas id="global-ratio-wld-canvas" width="100%" height="100%"></canvas>
+        </div>
+    </div>
+    <div style="width: 100%; height: 10rem;"">
+        <div style="float: left; width: 10rem; height: 10rem;">
+            <canvas id="sf5-ratio-canvas" width="100%" height="100%"></canvas>
+        </div>
+        <div style="float: left; width: 10rem; height: 10rem;">
+            <canvas id="sf5-ratio-wld-canvas" width="100%" height="100%"></canvas>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let globalWins = {{ global_stats['globals']['wins'] }};
+        let globalLooses = {{ global_stats['globals']['loses'] }};
+        let globalDraws = {{ global_stats['globals']['draws'] }};
+        let dataWld = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [globalWins, globalLooses, globalDraws],
+                    backgroundColor: [
+                        '#ff6384',
+                        '#36a2eb',
+                    ]
+                }],
+                labels: [
+                    'Wins',
+                    'Loses',
+                    'Draws',
+                ]
+            },
+        };
+        let globalWldChart = new Chart(document.getElementById('global-ratio-canvas').getContext('2d'), dataWld);
+
+        let globalRatio = {{ global_stats['globals']['ratio'] }};
+        let dataGlobalRatio = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [globalRatio, 100 - globalRatio],
+                    backgroundColor: [
+                        '#ff6384',
+                    ]
+                }],
+                labels: [
+                    'Win Ratio',
+                    'Loses Ratio',
+                ],
+            },
+        };
+        let globalRatioChart = new Chart(document.getElementById('global-ratio-wld-canvas').getContext('2d'), dataGlobalRatio);
+
+        // SF5
+        let globalSF5Wins = {{ sf5_stats['wins'] }};
+        let globalSF5Looses = {{ sf5_stats['loses'] }};
+        let globalSF5Draws = {{ sf5_stats['draws'] }};
+        let dataSF5Wld = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [globalSF5Wins, globalSF5Looses, globalSF5Draws],
+                    backgroundColor: [
+                        '#ff6384',
+                        '#36a2eb',
+                    ]
+                }],
+                labels: [
+                    'SF5 - Wins',
+                    'SF5 - Loses',
+                    'SF5 - Draws',
+                ]
+            },
+        };
+        let globalSF5WldChart = new Chart(document.getElementById('sf5-ratio-canvas').getContext('2d'), dataSF5Wld);
+
+        let globalSF5Ratio = {{ sf5_stats['ratio'] }};
+        let dataSF5GlobalRatio = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [globalSF5Ratio, 100 - globalSF5Ratio],
+                    backgroundColor: [
+                        '#ff6384',
+                    ]
+                }],
+                labels: [
+                    'SF5 - Win Ratio',
+                    'SF5 - Loses Ratio',
+                ],
+            },
+        };
+        let globalSF5RatioChart = new Chart(document.getElementById('sf5-ratio-wld-canvas').getContext('2d'), dataSF5GlobalRatio);
+    </script>
 {% endblock %}
