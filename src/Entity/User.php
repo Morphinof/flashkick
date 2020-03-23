@@ -45,6 +45,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->enabled = true;
+        $this->player = new Player();
     }
 
     public function getEmail(): ?string

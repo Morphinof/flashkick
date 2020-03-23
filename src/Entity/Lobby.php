@@ -29,18 +29,30 @@ class Lobby
      * @ORM\JoinColumn(name="lobby_configuration_id", referencedColumnName="id")
      */
     private LobbyConfiguration $configuration;
+//
+//    /**
+//     * @var Player[]|Collection
+//     * @ORM\ManyToMany(targetEntity=Player::class)
+//     * @ORM\JoinTable(
+//     *     name="lobbies_players",
+//     *     joinColumns={@ORM\JoinColumn(name="lobby_id", referencedColumnName="id")},
+//     *     inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", unique=true)}
+//     * )
+//     */
+//    private Collection $players;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Player::class)
+     * @var LobbyPlayer[]|Collection
+     * @ORM\ManyToMany(targetEntity=LobbyPlayer::class, cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinTable(
-     *     name="lobbies_players",
      *     joinColumns={@ORM\JoinColumn(name="lobby_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id", unique=true)}
+     *     inverseJoinColumns={@ORM\JoinColumn(name="lobby_player_id", referencedColumnName="id", unique=true)}
      * )
      */
     private Collection $players;
 
     /**
+     * @var Set[]|Collection
      * @ORM\ManyToMany(targetEntity=Set::class)
      * @ORM\JoinTable(
      *     name="lobbies_sets",
@@ -57,8 +69,10 @@ class Lobby
 
     public function __construct()
     {
+        $this->configuration = new LobbyConfiguration();
         $this->players = new ArrayCollection();
         $this->sets = new ArrayCollection();
+//        $this->rotation = new ArrayCollection();
     }
 
     public function getCreator(): Player
@@ -81,23 +95,12 @@ class Lobby
         $this->configuration = $configuration;
     }
 
+    /**
+     * @return LobbyPlayer|Collection
+     */
     public function getPlayers(): Collection
     {
         return $this->players;
-    }
-
-    public function addPlayer(Player $player): void
-    {
-        if (!$this->players->contains($player)) {
-            $this->players[] = $player;
-        }
-    }
-
-    public function removePlayer(Player $player): void
-    {
-        if ($this->players->contains($player)) {
-            $this->players->removeElement($player);
-        }
     }
 
     /**
@@ -119,6 +122,38 @@ class Lobby
     {
         if ($this->sets->contains($set)) {
             $this->sets->removeElement($set);
+        }
+    }
+
+    public function hasPlayer(Player $player): bool
+    {
+        foreach ($this->players as $lobbyPlayer) {
+            if ($lobbyPlayer->getPlayer() === $player) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function addPlayer(Player $player): void
+    {
+        foreach ($this->players as $lobbyPlayer) {
+            if ($lobbyPlayer->getPlayer() === $player) {
+                return;
+            }
+        }
+
+        $this->players[] = new LobbyPlayer($player, $this->players->count());
+    }
+
+    public function removePlayer(Player $player): void
+    {
+        foreach ($this->players as $lobbyPlayer) {
+            if ($lobbyPlayer->getPlayer() === $player) {
+                $this->players->removeElement($lobbyPlayer);
+                return;
+            }
         }
     }
 
