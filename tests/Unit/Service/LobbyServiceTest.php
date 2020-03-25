@@ -9,6 +9,8 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Flashkick\Entity\Lobby;
+use Flashkick\Entity\Match;
+use Flashkick\Entity\Set;
 use Flashkick\Entity\User;
 use Flashkick\Repository\LobbyRepository;
 use Flashkick\Service\LobbyService;
@@ -135,6 +137,60 @@ class LobbyServiceTest extends KernelTestCase
 
         $this->expectException(LogicException::class);
         $lobbyService->kick($lobby, $player);
+    }
+
+    public function testLobbyIsFull(): void
+    {
+        $user = new User();
+        $player = $user->getPlayer();
+        $user2 = new User();
+        $player2 = $user2->getPlayer();
+        $lobby = new Lobby();
+        $lobby->setCreator($player);
+        $lobby->addPlayer($player);
+        $lobby->getConfiguration()->setMaxPlayers(1);
+
+        $lobbyService = new LobbyService($this->registry->reveal(), $this->tokenStorage->reveal(),
+            $this->lobbyRepository->reveal());
+
+        $lobbyService->join($lobby, $player);
+
+        $this->assertTrue($lobby->hasPlayer($player));
+
+        $this->expectException(RuntimeException::class);
+
+        $lobbyService->join($lobby, $player2);
+    }
+
+    public function testGetNextAdversary(): void
+    {
+        $user = new User();
+        $player = $user->getPlayer();
+        $user2 = new User();
+        $player2 = $user2->getPlayer();
+        $user3 = new User();
+        $player3 = $user3->getPlayer();
+        $lobby = new Lobby();
+        $lobby->setCreator($player);
+        $lobby->addPlayer($player);
+        $lobby->addPlayer($player2);
+        $lobby->addPlayer($player3);
+
+        $match = new Match();
+        $match->setPlayer1($player);
+        $match->setPlayer2($player2);
+        $set = new Set();
+        $set->addMatch($match);
+        $lobby->addSet($set);
+        $lobbyService = new LobbyService($this->registry->reveal(), $this->tokenStorage->reveal(),
+            $this->lobbyRepository->reveal());
+        $adversary = $lobbyService->getNextAdversary($lobby);
+
+        $this->assertSame($adversary, $player3);
+
+        $lobby->removePlayer($player3);
+        $adversary = $lobbyService->getNextAdversary($lobby);
+        $this->assertNull($adversary);
     }
 
     protected function tearDown(): void
