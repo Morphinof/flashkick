@@ -91,7 +91,7 @@ class MatchService
         $resolution = $match->getResolution();
         if ($resolution->getValidationP1() === $resolution->getValidationP2()) {
             if ($resolution->getValidationP1() !== MatchResolution::DRAW) {
-                throw new LogicException(sprintf('Conflict detected on resolution of match %s', $match->getUuid()));
+                throw new LogicException(sprintf('Conflict detected on resolution of match "%s"', $match->getUuid()));
             }
         }
     }

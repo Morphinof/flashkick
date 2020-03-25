@@ -27,7 +27,7 @@ class MatchResolution
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private ?int $validationP1;
+    private ?int $validationP1 = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -37,7 +37,7 @@ class MatchResolution
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private ?int $validationP2;
+    private ?int $validationP2 = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)

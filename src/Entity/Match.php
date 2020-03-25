@@ -6,6 +6,7 @@ namespace Flashkick\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Flashkick\Traits\EntityWithUuidTrait;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="Flashkick\Repository\MatchRepository")
@@ -29,7 +30,7 @@ class Match
     private ?Character $player1Character;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Player::class)
+     * @ORM\ManyToOne(targetEntity=Player::class)Flashkick\Entity\MatchResolution::$validationP2
      * @ORM\JoinColumn(name="player_2", referencedColumnName="id")
      */
     private Player $player2;
