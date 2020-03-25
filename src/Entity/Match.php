@@ -45,7 +45,7 @@ class Match
      * @ORM\ManyToOne(targetEntity=Player::class)
      * @ORM\JoinColumn(name="winner", referencedColumnName="id", nullable=true)
      */
-    private ?Player $winner;
+    private ?Player $winner = null;
 
     /**
      * @ORM\OneToOne(targetEntity=MatchResolution::class, cascade={"persist", "remove"})
