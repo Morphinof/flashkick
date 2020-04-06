@@ -1,0 +1,25 @@
+{% set selected = false %}
+<div class="dropdown" style="float: right;margin-left: 1rem;">
+    <button class="btn btn-info dropdown-toggle" type="button" id="character-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {% for character in characters %}
+            {% if userCharacter is not null and userCharacter == character or previousUserCharacter is not null and previousUserCharacter == character %}
+                {{ character }}
+                {% set selected = true %}
+            {% endif %}
+        {% endfor %}
+        {% if not selected %}
+            Select your character
+        {% endif %}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        {% for character in characters %}
+            <a
+                class="dropdown-item"
+                href="{{ path('match_select_character', {'match': match.id, 'player': app.user.player.id, 'character': null}) }}"
+                data-character-id="{{ character.id }}"
+            >
+                {{ character }}
+            </a>
+        {% endfor %}
+    </div>
+</div>

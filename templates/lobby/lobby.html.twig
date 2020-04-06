@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-bootstrap.html.twig' %}
 
 {% block title %}Hello LobbyController!{% endblock %}
 
@@ -18,9 +18,31 @@
     {% elseif validation is constant('Flashkick\\Entity\\MatchResolution::DRAW') %}
         {{ player }} says draw
     {% else %}
-        waiting for {{ player }}'s validation
+        {% set color = 'primary' %}
+        {% if match.player2 == player %}
+            {% set color = 'danger' %}
+        {% endif %}
+        <div class="spinner-border text-{{ color }}" role="status" style="float: left;">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <p style="float: left; position: relative; top: 0.3rem; left: 0.3rem;">
+            Waiting for {{ player }}'s validation
+        </p>
     {% endif %}
 {% endmacro  %}
+
+{% macro displayPlayer(player, character) %}
+    <div style="display: table-cell; text-align: center;">
+        {% if character is not null %}
+            <img src="{{ character.icon }}" alt="{{ character }}">
+        {% else %}
+            <img src="https://place-hold.it/75x86" alt="Unknown character">
+        {% endif %}
+        <div style="max-width: 10rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+            {{ player }}
+        </div>
+    </div>
+{% endmacro %}
 
 {% set previousUserCharacter = null %}
 {% set userCharacter = null %}
@@ -28,101 +50,100 @@
 <div class="example-wrapper">
     <div style="float: left; margin-right:3rem;">
         <h3>Players</h3>
-        <ul>
+        <ul class="list-group">
             {% for player in lobby.players %}
-                <li>
-                    {% if lobby.creator == player %}*{% endif %}
+                {% set isPlayer = app.user.player == player %}
+                <li class="list-group-item" style="border-radius: 0;{% if isPlayer %} text-decoration: underline;{% endif %}">
+                    {% if lobby.creator == player %}<i class="fas fa-star" style="float: right; color: #EEE8AA; margin-left: 0.5rem;"></i>{% endif %}
                     {{ player }}
-                    {% if app.user.player == player %}
-                        <a href="{{ path('flashkick_lobby_leave', {'lobby': lobby.id}) }}">Leave</a>
-                    {% endif %}
                     {% if app.user.player == lobby.creator and player != lobby.creator %}
-                        <a href="{{ path('flashkick_lobby_kick', {'lobby': lobby.id, 'player': player.id}) }}">Kick</a>
+                        <a class="btn btn-danger btn-sm" href="{{ path('flashkick_lobby_kick', {'lobby': lobby.id, 'player': player.id}) }}">Kick</a>
                     {% endif %}
                 </li>
             {% endfor %}
         </ul>
+        <div style="margin-top: 1rem;">
+            <a class="btn btn-danger btn-sm" href="{{ path('flashkick_lobby_leave', {'lobby': lobby.id}) }}">Leave</a>
+        </div>
     </div>
     <div style="float: left;">
         <h3>Sets history</h3>
-        {% for set in lobby.sets %}
-            <p>Set {{ loop.index }} (BO{{ set.bestOf }})</p>
-            {% for match in set.matches %}
-                {% set player1Character = match.player1Character %}
-                {% set player2Character = match.player2Character %}
-                {% if app.user.player == match.player1 %}
-                    {% set userCharacter = player1Character %}
-                {% elseif app.user.player == match.player2 %}
-                    {% set userCharacter = player2Character %}
-                {% endif %}
-                {% if loop.index == 0 %}
-                    {% set previousUserCharacter = userCharacter %}
-                {% endif %}
-                <ul>
-                    <li>
-                        <div>
-                            {{ match.player1 }}
-                            {% if player1Character is not null %}
-                                ({{ player1Character }})
-                            {% endif %}
-                            VS
-                            {{ match.player2 }}
-                            {% if player2Character is not null %}
-                                ({{ player2Character }})
+        <ul class="lobby-set list-group" style="margin-bottom: 3rem;">
+            {% for set in lobby.sets|reverse %}
+                <li class="list-group-item" style="padding: 0; border-radius: 0;">
+                    <div style="width: 100%; height: 3.5rem; padding: 0.95rem 1rem 1rem 1rem; border-bottom: solid 1px rgba(0,0,0,.125);">
+                        <h4 style="float: left; margin: 0;">Set {{ loop.revindex }}</h4>
+                        <span class="badge badge-info" style="float: right; position: relative; top: 0.2rem;">
+                            BO {{ set.bestOf }}
+                        </span>
+                    </div>
+                    {% for match in set.matches %}
+                        {% set player1Character = match.player1Character %}
+                        {% set player2Character = match.player2Character %}
+                        {% if app.user.player == match.player1 %}
+                            {% set userCharacter = player1Character %}
+                        {% elseif app.user.player == match.player2 %}
+                            {% set userCharacter = player2Character %}
+                        {% endif %}
+                        {% if loop.index == 0 %}
+                            {% set previousUserCharacter = userCharacter %}
+                        {% endif %}
+                        <div style="width: 100%;">
+                            <ul class="list-group">
+                                <li class="list-group-item" style="border: 0; padding-top: 0;">
+                                    <div style="width: 100%; text-align: center; margin-top: 0.5rem;">
+                                        Match {{ loop.index }}
+                                    </div>
+                                    <div style="width: 100%; margin-bottom: 1rem; display: table;">
+                                        {{ _self.displayPlayer(match.player1, player1Character) }}
+                                        <div style="text-align: center; font-size: 3rem; display: table-cell;">VS</div>
+                                        {{ _self.displayPlayer(match.player2, player2Character) }}
+                                    </div>
+                                    {% if match.winner is not null %}
+                                        <div style="width: 100%; text-align: center; border-top: solid 1px rgba(0,0,0,.125); border-bottom: solid 1px rgba(0,0,0,.125);">
+                                            Winner {{ match.winner }}
+                                        </div>
+                                    {% elseif not match.ended %}
+                                        {% if app.user.player == match.player1 or app.user.player == match.player2 %}
+                                            {% include 'match/resolver.html.twig' with {'match': match} %}
+                                            {% if (app.user.player == match.player1 and match.resolution.validationP1 is null) or
+                                                (app.user.player == match.player2 and match.resolution.validationP2 is null)
+                                            %}
+                                                {% include 'character/selector.html.twig' with {'previousUserCharacter': previousUserCharacter, 'userCharacter': userCharacter} %}
+                                            {% endif %}
+                                        {% endif %}
+                                        <div style="margin-top: 1rem;">
+                                            <ul class="list-group">
+                                                <li class="list-group-item" style="border-radius: 0;">
+                                                    {{ _self.display_player_resolution(match, match.player1, 1) }}
+                                                </li>
+                                                <li class="list-group-item" style="border-radius: 0;">
+                                                    {{ _self.display_player_resolution(match, match.player2, 2) }}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% else %}
+                                        <div style="width: 100%; text-align: center; border-top: solid 1px rgba(0,0,0,.125); border-bottom: solid 1px rgba(0,0,0,.125);">
+                                            Draw game !
+                                        </div>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endfor %}
+                    {% if set.ended %}
+                        <div style="text-align: center; margin-bottom: 0.5rem;">
+                            {% if not set.isDraw %}
+                                {{ set.winner }} won
+                                {{ set.countResolutionsByPlayer(set.matches.first.player1) }} / {{ set.countResolutionsByPlayer(set.matches.first.player2) }}
+                            {% else %}
+                                Draw set !
                             {% endif %}
                         </div>
-                        {% if match.winner is not null %}
-                            Winner {{ match.winner }}
-                        {% elseif not match.ended %}
-                            {% if app.user.player == match.player1 or app.user.player == match.player2 %}
-                                <div>
-                                    <label>
-                                        <select id="character-selector">
-                                            <option value="">Select your character</option>
-                                            {% for character in characters %}
-                                                <option
-                                                    value="{{ character.id }}"
-                                                    {% if userCharacter is not null and userCharacter == character or previousUserCharacter is not null and previousUserCharacter == character %}
-                                                        selected="selected"
-                                                    {% endif %}
-                                                >
-                                                    {{ character }}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
-                                        <button
-                                                id="character-select"
-                                                data-url="{{ path('match_select_character', {'match': match.id, 'player': app.user.player.id, 'character': null}) }}"
-                                        >OK</button>
-                                    </label>
-                                </div>
-                            {% endif %}
-                            <div>
-                                {% if app.user.player == match.player1 or app.user.player == match.player2 %}
-                                    {% if (app.user.player == match.player1 and match.resolution.validationP1 is null) or (app.user.player == match.player2 and match.resolution.validationP2 is null) %}
-                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::WIN')}) }}">
-                                            WON
-                                        </a>
-                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::LOOSE')}) }}">
-                                            LOOSE
-                                        </a>
-                                        <a href="{{ path('match_resolve', {'match': match.id, 'player': app.user.player.id, 'resolution': constant('Flashkick\\Entity\\MatchResolution::DRAW')}) }}">
-                                            DRAW
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                            <ul>
-                                <li>{{ _self.display_player_resolution(match, match.player1, 1) }}</li>
-                                <li>{{ _self.display_player_resolution(match, match.player2, 2) }}</li>
-                            </ul>
-                        {% else %}
-                            Draw game
-                        {% endif %}
-                    </li>
-                </ul>
+                    {% endif %}
+                </li>
             {% endfor %}
-        {% endfor %}
+        </ul>
     </div>
 </div>
 {% endblock %}
@@ -130,12 +151,21 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        let selectCharacterBtn = $('#character-select');
-        selectCharacterBtn.on('click', function (e) {
-            e.preventDefault();
+        $(document).ready(function () {
+            $(".dropdown-menu").on('click', 'a', function(e) {
+                e.preventDefault();
 
+                $(".btn:first-child").text($(this).text());
+                $(".btn:first-child").val($(this).data('character-id'));
+
+                selectCharacter(e.target);
+            });
+        });
+
+        function selectCharacter(a) {
+            console.log('selectCharacter');
             let characterSelector = $('#character-selector');
-            let url = selectCharacterBtn.data('url')
+            let url = a.href;
             if (characterSelector.val() !== '') {
                 url = url + '/' + characterSelector.val();
             }
@@ -145,6 +175,6 @@
             }).done(function() {
                 document.location.reload();
             });
-        });
+        }
     </script>
 {% endblock %}
