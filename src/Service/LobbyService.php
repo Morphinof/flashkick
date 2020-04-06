@@ -6,6 +6,7 @@ namespace Flashkick\Service;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Flashkick\Entity\Lobby;
+use Flashkick\Entity\LobbyPlayer;
 use Flashkick\Entity\Match;
 use Flashkick\Entity\Player;
 use Flashkick\Entity\Set;
@@ -34,7 +35,7 @@ class LobbyService
     {
         $this->autoLeave($player);
 
-        if ($lobby->getPlayers()->contains($player)) {
+        if ($lobby->hasPlayer($player)) {
             return;
         }
 
@@ -90,26 +91,26 @@ class LobbyService
 
         $players = $lobby->getPlayers();
 
-        $adversaries = $players->filter(static function (Player $player) use ($lastMatch): ?Player {
-            if ($player !== $lastMatch->getPlayer1() && $player !== $lastMatch->getPlayer2()) {
-                return $player;
+        $adversaries = $players->filter(static function (LobbyPlayer $lobbyPlayer) use ($lastMatch): ?Player {
+            if (!in_array($lobbyPlayer->getPlayer(), [$lastMatch->getPlayer1(), $lastMatch->getPlayer2()], true)) {
+                return $lobbyPlayer->getPlayer();
             }
 
             return null;
         });
 
         if ($adversaries->count() > 0) {
-            return $adversaries->first();
+            return $adversaries->first()->getPlayer();
         }
 
-        $nextPlayer = $lastMatch->getPlayer1();
-        if ($adversaries->count() === 0 && $lastMatch->getWinner() === $nextPlayer) {
-            $nextPlayer = $lastMatch->getPlayer2();
-        }
+//        $nextPlayer = $lastMatch->getPlayer1();
+//        if ($adversaries->count() === 0 && $lastMatch->getWinner() === $nextPlayer) {
+//            $nextPlayer = $lastMatch->getPlayer2();
+//        }
 
-        if ($lobby->getPlayers()->contains($nextPlayer)) {
-            return $nextPlayer;
-        }
+//        if ($lobby->getPlayers()->contains($nextPlayer)) {
+//            return $nextPlayer;
+//        }
 
         return null;
     }

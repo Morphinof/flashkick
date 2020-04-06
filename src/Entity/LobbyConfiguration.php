@@ -37,12 +37,12 @@ class LobbyConfiguration
     /**
      * @ORM\Column(type="smallint")
      */
-    private int $maxPlayers;
+    private int $maxPlayers = 10;
 
     /**
      * @ORM\Column(type="smallint")
      */
-    private int $bestOf;
+    private int $bestOf = 3;
 
     public function getAdmin(): Player
     {
